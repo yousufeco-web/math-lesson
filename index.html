@@ -56,7 +56,7 @@
             cursor: pointer;
             user-select: none;
         }
-        h2 { font-size: 3.5rem; }
+        h2 { font-size: 3.5rem; margin: 10px 0; }
         .huge-text { font-size: 8rem; font-weight: bold; color: #1976D2; }
         
         .giant-text { font-size: 15rem; font-weight: bold; color: #FF8F00; line-height: 1; margin-bottom: 20px;}
@@ -164,6 +164,36 @@
             width: 80px; height: 80px; background: #4FC3F7; border-radius: 10px; font-size: 3rem;
             display: flex; justify-content: center; align-items: center; cursor: grab; color: #fff; font-weight: bold;
         }
+
+        /* New Page 15 Styles */
+        .wp-text { font-size: 2.5rem; max-width: 800px; line-height: 1.4; margin-bottom: 20px; }
+        .equation-inputs { display: flex; align-items: center; justify-content: center; font-size: 4rem; gap: 15px; margin-bottom: 15px; }
+        
+        .circle-drop {
+            width: 80px; height: 80px; border-radius: 50%; border: 4px dashed #FF8F00;
+            display: flex; justify-content: center; align-items: center; background: #fff;
+            font-size: 3rem; font-weight: bold;
+        }
+        
+        .p15-drag-num {
+            width: 70px; height: 70px; background: #FFCA28; border-radius: 50%; font-size: 2.5rem;
+            display: flex; justify-content: center; align-items: center; cursor: grab; color: #333; font-weight: bold; border: 3px solid #FF8F00;
+        }
+        
+        #drawing-canvas {
+            border: 3px dashed #9E9E9E; background: #fff; border-radius: 15px;
+            cursor: crosshair; touch-action: none;
+        }
+        
+        .btn-check {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1.8rem;
+            padding: 10px 40px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .btn-check:hover { background-color: #388E3C; }
     </style>
 </head>
 <body>
@@ -174,9 +204,7 @@
             <p>(Touch the words)</p>
         </div>
 
-        <div id="page2" class="page">
-            <h2>Class Rules</h2>
-        </div>
+        <div id="page2" class="page"><h2>Class Rules</h2></div>
 
         <div id="page3" class="page">
             <div class="rule-img clickable" onclick="speakText('Do not touch other kids')">🛑 ✋</div>
@@ -193,21 +221,10 @@
             <h2>Quiet mouth</h2>
         </div>
 
-        <div id="page6" class="page">
-            <h1>Warm Up</h1>
-        </div>
-
-        <div id="page7" class="page">
-            <div id="p7-display" class="huge-text">1</div>
-        </div>
-
-        <div id="page8" class="page">
-            <div id="p8-display" class="huge-text">30</div>
-        </div>
-
-        <div id="page9" class="page">
-            <h1>Ready for the test?</h1>
-        </div>
+        <div id="page6" class="page"><h1>Warm Up</h1></div>
+        <div id="page7" class="page"><div id="p7-display" class="huge-text">1</div></div>
+        <div id="page8" class="page"><div id="p8-display" class="huge-text">40</div></div>
+        <div id="page9" class="page"><h1>Ready for the test?</h1></div>
 
         <div id="page10" class="page">
             <div id="p10-cd" class="top-right-small"></div>
@@ -215,18 +232,14 @@
             <button id="pause-btn-10" class="btn-pause" onclick="togglePause()">⏸ Pause</button>
         </div>
 
-        <div id="page11" class="page">
-            <h1>Addition Facts</h1>
-        </div>
+        <div id="page11" class="page"><h1>Addition Facts</h1></div>
 
         <div id="page12" class="page">
             <div id="p12-eq" class="huge-text"></div>
             <button id="pause-btn-12" class="btn-pause" onclick="togglePause()">⏸ Pause</button>
         </div>
 
-        <div id="page13" class="page">
-            <h1>Addition within 10</h1>
-        </div>
+        <div id="page13" class="page"><h1>Addition within 10</h1></div>
 
         <div id="page14" class="page">
             <div id="game-board">
@@ -256,6 +269,27 @@
         </div>
 
         <div id="page15" class="page">
+            <div id="p15-story" class="wp-text"></div>
+            
+            <div class="bottom-tools" id="p15-draggables" style="margin-top: 0; margin-bottom: 20px; padding: 15px; gap: 30px;">
+                </div>
+
+            <div class="equation-inputs">
+                <div id="p15-drop1" class="circle-drop" ondrop="dropP15(event, 'drop1')" ondragover="allowDrop(event)"></div>
+                <span>+</span>
+                <div id="p15-drop2" class="circle-drop" ondrop="dropP15(event, 'drop2')" ondragover="allowDrop(event)"></div>
+                <span>=</span>
+                <div id="p15-drop3" class="circle-drop" ondrop="dropP15(event, 'drop3')" ondragover="allowDrop(event)"></div>
+            </div>
+
+            <button class="btn-check" onclick="checkP15()">✔️ Check</button>
+
+            <h3 style="margin: 5px 0;">Draw lines below to count:</h3>
+            <canvas id="drawing-canvas" width="600" height="250"></canvas>
+            <button class="btn-pause" style="margin-top: 15px; padding: 10px 30px; font-size: 1.2rem;" onclick="clearCanvas()">🗑️ Clear Drawing</button>
+        </div>
+
+        <div id="page16" class="page">
             <h1>Rotation Time</h1>
         </div>
     </div>
@@ -269,7 +303,7 @@
     <script>
         // --- State Management ---
         let currentPage = 1;
-        const totalPages = 15;
+        const totalPages = 16;
         let activeRunId = 0; 
         let isPaused = false;
 
@@ -284,29 +318,20 @@
         // --- Pause / Resume Logic ---
         function togglePause() {
             isPaused = !isPaused;
-            
-            if (isPaused) {
-                window.speechSynthesis.pause();
-            } else {
-                window.speechSynthesis.resume();
-            }
+            if (isPaused) { window.speechSynthesis.pause(); } 
+            else { window.speechSynthesis.resume(); }
 
-            // Update both buttons just in case
             const btn10 = document.getElementById('pause-btn-10');
             const btn12 = document.getElementById('pause-btn-12');
-            
             if (btn10) btn10.innerText = isPaused ? "▶ Resume" : "⏸ Pause";
             if (btn12) btn12.innerText = isPaused ? "▶ Resume" : "⏸ Pause";
         }
 
-        // Custom delay that respects the pause state and cancels if page changes
         const delay = async (ms, runId) => {
             let elapsed = 0;
             while (elapsed < ms) {
-                if (activeRunId !== runId) return; // Exit immediately if page switched
-                if (!isPaused) {
-                    elapsed += 100;
-                }
+                if (activeRunId !== runId) return; 
+                if (!isPaused) { elapsed += 100; }
                 await new Promise(res => setTimeout(res, 100));
             }
         };
@@ -314,11 +339,8 @@
         // --- Navigation Logic ---
         function changePage(direction) {
             document.getElementById(`page${currentPage}`).classList.remove('active-page');
-            
             currentPage += direction;
             activeRunId++; 
-            
-            // Reset Pause State on page change
             isPaused = false;
             document.getElementById('pause-btn-10').innerText = "⏸ Pause";
             document.getElementById('pause-btn-12').innerText = "⏸ Pause";
@@ -326,8 +348,6 @@
             window.speechSynthesis.cancel(); 
 
             document.getElementById(`page${currentPage}`).classList.add('active-page');
-            
-            // Update UI
             document.getElementById('btn-prev').disabled = currentPage === 1;
             document.getElementById('btn-next').disabled = currentPage === totalPages;
             document.getElementById('page-indicator').innerText = `Page ${currentPage}`;
@@ -335,13 +355,10 @@
             runPageLogic(currentPage);
         }
 
-        // --- Page Specific Logic ---
         async function runPageLogic(page) {
             let currentRun = activeRunId;
 
-            if (page === 6) {
-                speakText("Warm Up");
-            } 
+            if (page === 6) { speakText("Warm Up"); } 
             else if (page === 7) {
                 while(activeRunId === currentRun) {
                     for(let i=1; i<=5; i++) {
@@ -354,7 +371,7 @@
             }
             else if (page === 8) {
                 while(activeRunId === currentRun) {
-                    for(let i=30; i<=40; i++) {
+                    for(let i=40; i<=50; i++) {
                         if (activeRunId !== currentRun) break;
                         document.getElementById('p8-display').innerText = i;
                         speakText(i.toString());
@@ -362,67 +379,48 @@
                     }
                 }
             }
-            else if (page === 9) {
-                speakText("Ready for the test?");
-            }
+            else if (page === 9) { speakText("Ready for the test?"); }
             else if (page === 10) {
-                const pool = [1,2,3,4,5,30,31,32,33,34,35,36,37,38,39,40];
-                
+                const pool = [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50];
                 while(activeRunId === currentRun) {
                     const target = pool[Math.floor(Math.random() * pool.length)];
                     document.getElementById('p10-num').innerText = target;
                     speakText("What number is it?");
-                    
                     for(let i=4; i>=1; i--) {
                         if (activeRunId !== currentRun) return;
-                        
-                        // Wait if paused before changing the countdown number
                         while(isPaused) {
                             if (activeRunId !== currentRun) return;
                             await new Promise(r => setTimeout(r, 100));
                         }
-
                         let cd = document.getElementById('p10-cd');
                         cd.innerText = i;
-                        
                         cd.classList.remove("popping");
                         void cd.offsetWidth; 
                         cd.classList.add("popping");
-                        
                         await delay(1000, currentRun);
                     }
-                    
                     if (activeRunId !== currentRun) return;
                     document.getElementById('p10-cd').innerText = "";
                     await delay(500, currentRun); 
                 }
             }
-            else if (page === 11) {
-                speakText("Addition Facts");
-            }
+            else if (page === 11) { speakText("Addition Facts"); }
             else if (page === 12) {
                 for(let i=1; i<=10; i++) {
                     if (activeRunId !== currentRun) return;
                     document.getElementById('p12-eq').innerText = `${i} + 1 = ?`;
                     speakText(`${i} plus one equals`);
-                    
                     await delay(3500, currentRun);
                     if (activeRunId !== currentRun) return;
-                    
                     document.getElementById('p12-eq').innerText = `${i} + 1 = ${i+1}`;
                     speakText(`${i+1}`);
                     await delay(2500, currentRun);
                 }
             }
-            else if (page === 13) {
-                speakText("Addition within 10");
-            }
-            else if (page === 14) {
-                initGame();
-            }
-            else if (page === 15) {
-                speakText("Rotation Time");
-            }
+            else if (page === 13) { speakText("Addition within 10"); }
+            else if (page === 14) { initGame(); }
+            else if (page === 15) { initPage15(true); }
+            else if (page === 16) { speakText("Rotation Time"); }
         }
 
         // --- Drag and Drop Math Game (Page 14) Logic ---
@@ -435,15 +433,8 @@
             document.getElementById('game-ans-box').innerText = "?";
             document.getElementById('game-ans-box').style.background = "#E3F2FD";
 
-            let n1, n2;
-            if (isEasyTurn) {
-                n1 = Math.floor(Math.random() * 3) + 1; 
-                n2 = Math.floor(Math.random() * 3) + 1; 
-            } else {
-                n1 = Math.floor(Math.random() * 3) + 5; 
-                n2 = Math.floor(Math.random() * 3) + 4; 
-            }
-            
+            let n1 = isEasyTurn ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 3) + 5; 
+            let n2 = isEasyTurn ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 3) + 4; 
             isEasyTurn = !isEasyTurn; 
             currentGameTarget = n1 + n2;
 
@@ -454,9 +445,7 @@
             while(options.length < 3) {
                 let offset = Math.floor(Math.random() * 5) - 2; 
                 let fakeAns = currentGameTarget + offset;
-                if (fakeAns > 0 && !options.includes(fakeAns)) {
-                    options.push(fakeAns);
-                }
+                if (fakeAns > 0 && !options.includes(fakeAns)) { options.push(fakeAns); }
             }
             options.sort(() => Math.random() - 0.5);
             
@@ -465,10 +454,7 @@
             document.getElementById('opt3').innerText = options[2];
         }
 
-        function allowDrop(ev) {
-            ev.preventDefault();
-        }
-
+        function allowDrop(ev) { ev.preventDefault(); }
         function drag(ev, type, value) {
             ev.dataTransfer.setData("type", type);
             ev.dataTransfer.setData("value", value);
@@ -501,6 +487,143 @@
                 }
             }
         }
+
+        // --- Page 15 Interactive Story Logic ---
+        let p15_n1, p15_n2, p15_total;
+        const storyNames = ["Mini", "Sam", "Leo", "Mia", "Zoe", "Max", "Ava"];
+        const storyItems = ["ice creams", "apples", "cookies", "candies", "cupcakes", "stickers"];
+        const storyActions = ["ate", "found", "bought", "got"];
+
+        function initPage15(isFirst) {
+            if (isFirst) {
+                p15_n1 = 2; p15_n2 = 6;
+                document.getElementById('p15-story').innerText = `Mini ate 2 ice creams. Sam ate 6 ice creams. How many did they eat all together?`;
+            } else {
+                p15_n1 = Math.floor(Math.random() * 5) + 1;
+                p15_n2 = Math.floor(Math.random() * 5) + 1;
+                let name1 = storyNames[Math.floor(Math.random() * storyNames.length)];
+                let name2 = storyNames[Math.floor(Math.random() * storyNames.length)];
+                while(name1 === name2) name2 = storyNames[Math.floor(Math.random() * storyNames.length)];
+                let item = storyItems[Math.floor(Math.random() * storyItems.length)];
+                let action = storyActions[Math.floor(Math.random() * storyActions.length)];
+
+                document.getElementById('p15-story').innerText = `${name1} ${action} ${p15_n1} ${item}. ${name2} ${action} ${p15_n2} ${item}. How many did they have all together?`;
+            }
+            speakText(document.getElementById('p15-story').innerText);
+            p15_total = p15_n1 + p15_n2;
+
+            // Reset drop zones
+            ['drop1', 'drop2', 'drop3'].forEach(id => {
+                let el = document.getElementById('p15-' + id);
+                el.innerText = "";
+                el.style.background = "#fff";
+                el.style.borderColor = "#FF8F00";
+            });
+
+            // Set up draggables
+            let draggables = [p15_n1, p15_n2, p15_total];
+            draggables.sort(() => Math.random() - 0.5);
+
+            let dragContainer = document.getElementById('p15-draggables');
+            dragContainer.innerHTML = "";
+            draggables.forEach(num => {
+                let div = document.createElement('div');
+                div.className = 'p15-drag-num';
+                div.draggable = true;
+                div.innerText = num;
+                div.ondragstart = (ev) => drag(ev, 'p15num', num);
+                dragContainer.appendChild(div);
+            });
+            clearCanvas();
+        }
+
+        function dropP15(ev, targetId) {
+            ev.preventDefault();
+            let type = ev.dataTransfer.getData("type");
+            let value = ev.dataTransfer.getData("value");
+
+            if (type === 'p15num') {
+                document.getElementById('p15-' + targetId).innerText = value;
+            }
+        }
+
+        function checkP15() {
+            let v1 = document.getElementById('p15-drop1').innerText;
+            let v2 = document.getElementById('p15-drop2').innerText;
+            let v3 = document.getElementById('p15-drop3').innerText;
+
+            if (!v1 || !v2 || !v3) {
+                speakText("Please fill all circles!");
+                return;
+            }
+
+            v1 = parseInt(v1);
+            v2 = parseInt(v2);
+            v3 = parseInt(v3);
+
+            let isCorrect = ((v1 === p15_n1 && v2 === p15_n2) || (v1 === p15_n2 && v2 === p15_n1)) && (v3 === p15_total);
+
+            if (isCorrect) {
+                ['drop1', 'drop2', 'drop3'].forEach(id => {
+                    document.getElementById('p15-' + id).style.background = "#A5D6A7";
+                    document.getElementById('p15-' + id).style.borderColor = "#388E3C";
+                });
+                speakText("Correct! Great job! Here is a new problem.");
+                setTimeout(() => initPage15(false), 3500);
+            } else {
+                ['drop1', 'drop2', 'drop3'].forEach(id => {
+                    document.getElementById('p15-' + id).style.background = "#EF9A9A";
+                    document.getElementById('p15-' + id).style.borderColor = "#E53935";
+                });
+                speakText("Not quite right. Try again!");
+                setTimeout(() => {
+                    ['drop1', 'drop2', 'drop3'].forEach(id => {
+                        document.getElementById('p15-' + id).style.background = "#fff";
+                        document.getElementById('p15-' + id).style.borderColor = "#FF8F00";
+                    });
+                }, 1500);
+            }
+        }
+
+        // --- Canvas Drawing Logic (Page 15) ---
+        const canvas = document.getElementById('drawing-canvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        ctx.lineWidth = 4;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = '#1976D2';
+
+        function getMousePos(canvas, evt) {
+            const rect = canvas.getBoundingClientRect();
+            return { x: evt.clientX - rect.left, y: evt.clientY - rect.top };
+        }
+        function getTouchPos(canvas, evt) {
+            const rect = canvas.getBoundingClientRect();
+            return { x: evt.touches[0].clientX - rect.left, y: evt.touches[0].clientY - rect.top };
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true; const pos = getMousePos(canvas, e);
+            ctx.beginPath(); ctx.moveTo(pos.x, pos.y);
+        });
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDrawing) return; const pos = getMousePos(canvas, e);
+            ctx.lineTo(pos.x, pos.y); ctx.stroke();
+        });
+        canvas.addEventListener('mouseup', () => { isDrawing = false; });
+        canvas.addEventListener('mouseout', () => { isDrawing = false; });
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault(); isDrawing = true; const pos = getTouchPos(canvas, e);
+            ctx.beginPath(); ctx.moveTo(pos.x, pos.y);
+        });
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault(); if (!isDrawing) return; const pos = getTouchPos(canvas, e);
+            ctx.lineTo(pos.x, pos.y); ctx.stroke();
+        });
+        canvas.addEventListener('touchend', () => { isDrawing = false; });
+
+        function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
     </script>
 </body>
 </html>
