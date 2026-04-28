@@ -212,7 +212,7 @@
         </div>
 
         <div id="page4" class="page">
-            <div class="rule-img clickable" onclick="speakText('Sit on chair')">🪑</div>
+            <div class="rule-img clickable" onclick="speakText('Sit on chair')">💺</div>
             <h2>Sit on chair</h2>
         </div>
 
@@ -223,7 +223,7 @@
 
         <div id="page6" class="page"><h1>Warm Up</h1></div>
         <div id="page7" class="page"><div id="p7-display" class="huge-text">1</div></div>
-        <div id="page8" class="page"><div id="p8-display" class="huge-text">40</div></div>
+        <div id="page8" class="page"><div id="p8-display" class="huge-text">50</div></div>
         <div id="page9" class="page"><h1>Ready for the test?</h1></div>
 
         <div id="page10" class="page">
@@ -365,28 +365,30 @@
                         if (activeRunId !== currentRun) break;
                         document.getElementById('p7-display').innerText = i;
                         speakText(i.toString());
-                        await delay(2000, currentRun); 
+                        await delay(1000, currentRun); 
                     }
                 }
             }
             else if (page === 8) {
                 while(activeRunId === currentRun) {
-                    for(let i=40; i<=50; i++) {
+                    for(let i=50; i<=60; i++) {
                         if (activeRunId !== currentRun) break;
                         document.getElementById('p8-display').innerText = i;
                         speakText(i.toString());
-                        await delay(2000, currentRun);
+                        await delay(1000, currentRun);
                     }
                 }
             }
             else if (page === 9) { speakText("Ready for the test?"); }
             else if (page === 10) {
-                const pool = [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50];
+                const pool = [50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60];
                 while(activeRunId === currentRun) {
                     const target = pool[Math.floor(Math.random() * pool.length)];
                     document.getElementById('p10-num').innerText = target;
                     speakText("What number is it?");
-                    for(let i=4; i>=1; i--) {
+                    
+                    // Countdown from 2 down to 1 (2 seconds total)
+                    for(let i=2; i>=1; i--) {
                         if (activeRunId !== currentRun) return;
                         while(isPaused) {
                             if (activeRunId !== currentRun) return;
@@ -401,7 +403,7 @@
                     }
                     if (activeRunId !== currentRun) return;
                     document.getElementById('p10-cd').innerText = "";
-                    await delay(500, currentRun); 
+                    await delay(2000, currentRun); 
                 }
             }
             else if (page === 11) { speakText("Addition Facts"); }
@@ -410,16 +412,18 @@
                     if (activeRunId !== currentRun) return;
                     document.getElementById('p12-eq').innerText = `${i} + 1 = ?`;
                     speakText(`${i} plus one equals`);
-                    await delay(3500, currentRun);
+                    // Increased pause to 2 seconds
+                    await delay(2000, currentRun);
                     if (activeRunId !== currentRun) return;
                     document.getElementById('p12-eq').innerText = `${i} + 1 = ${i+1}`;
                     speakText(`${i+1}`);
-                    await delay(2500, currentRun);
+                    // Increased pause to 2 seconds
+                    await delay(2000, currentRun);
                 }
             }
             else if (page === 13) { speakText("Addition within 10"); }
             else if (page === 14) { initGame(); }
-            else if (page === 15) { initPage15(true); }
+            else if (page === 15) { initPage15(); }
             else if (page === 16) { speakText("Rotation Time"); }
         }
 
@@ -491,24 +495,26 @@
         // --- Page 15 Interactive Story Logic ---
         let p15_n1, p15_n2, p15_total;
         const storyNames = ["Mini", "Sam", "Leo", "Mia", "Zoe", "Max", "Ava"];
-        const storyItems = ["ice creams", "apples", "cookies", "candies", "cupcakes", "stickers"];
-        const storyActions = ["ate", "found", "bought", "got"];
+        
+        // Split logic into "themes" so you don't "eat" non-food items
+        const storyThemes = [
+            { items: ["ice creams", "apples", "cookies", "candies", "cupcakes"], actions: ["ate", "bought", "got"] },
+            { items: ["stickers", "pencils", "marbles", "blocks", "cards"], actions: ["found", "bought", "got", "collected"] }
+        ];
 
-        function initPage15(isFirst) {
-            if (isFirst) {
-                p15_n1 = 2; p15_n2 = 6;
-                document.getElementById('p15-story').innerText = `Mini ate 2 ice creams. Sam ate 6 ice creams. How many did they eat all together?`;
-            } else {
-                p15_n1 = Math.floor(Math.random() * 5) + 1;
-                p15_n2 = Math.floor(Math.random() * 5) + 1;
-                let name1 = storyNames[Math.floor(Math.random() * storyNames.length)];
-                let name2 = storyNames[Math.floor(Math.random() * storyNames.length)];
-                while(name1 === name2) name2 = storyNames[Math.floor(Math.random() * storyNames.length)];
-                let item = storyItems[Math.floor(Math.random() * storyItems.length)];
-                let action = storyActions[Math.floor(Math.random() * storyActions.length)];
+        function initPage15() {
+            p15_n1 = Math.floor(Math.random() * 4) + 6;
+            p15_n2 = Math.floor(Math.random() * 4) + 6;
+            
+            let name1 = storyNames[Math.floor(Math.random() * storyNames.length)];
+            let name2 = storyNames[Math.floor(Math.random() * storyNames.length)];
+            while(name1 === name2) name2 = storyNames[Math.floor(Math.random() * storyNames.length)];
+            
+            let theme = storyThemes[Math.floor(Math.random() * storyThemes.length)];
+            let item = theme.items[Math.floor(Math.random() * theme.items.length)];
+            let action = theme.actions[Math.floor(Math.random() * theme.actions.length)];
 
-                document.getElementById('p15-story').innerText = `${name1} ${action} ${p15_n1} ${item}. ${name2} ${action} ${p15_n2} ${item}. How many did they have all together?`;
-            }
+            document.getElementById('p15-story').innerText = `${name1} ${action} ${p15_n1} ${item}. ${name2} ${action} ${p15_n2} ${item}. How many did they have all together?`;
             speakText(document.getElementById('p15-story').innerText);
             p15_total = p15_n1 + p15_n2;
 
@@ -520,9 +526,14 @@
                 el.style.borderColor = "#FF8F00";
             });
 
-            // Set up draggables
-            let draggables = [p15_n1, p15_n2, p15_total];
-            draggables.sort(() => Math.random() - 0.5);
+            // Set up draggables with a distractor
+            let distractor;
+            do {
+                distractor = Math.floor(Math.random() * 10) + 10; 
+            } while (distractor === p15_n1 || distractor === p15_n2 || distractor === p15_total);
+            
+            let draggables = [p15_n1, p15_n2, p15_total, distractor];
+            draggables.sort(() => Math.random() - 0.5); 
 
             let dragContainer = document.getElementById('p15-draggables');
             dragContainer.innerHTML = "";
@@ -569,7 +580,7 @@
                     document.getElementById('p15-' + id).style.borderColor = "#388E3C";
                 });
                 speakText("Correct! Great job! Here is a new problem.");
-                setTimeout(() => initPage15(false), 3500);
+                setTimeout(() => initPage15(), 3500);
             } else {
                 ['drop1', 'drop2', 'drop3'].forEach(id => {
                     document.getElementById('p15-' + id).style.background = "#EF9A9A";
