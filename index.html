@@ -131,7 +131,7 @@
         .btn-pause:hover { background-color: #FFA000; }
 
         /* Drag and Drop Game Styles */
-        #game-board { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 30px; }
+        #game-board { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 30px; }
         .equation-row { display: flex; justify-content: center; align-items: center; font-size: 4rem; gap: 20px; }
         .number-circle { 
             width: 100px; height: 100px; border-radius: 50%; background: #FFCA28; 
@@ -141,19 +141,50 @@
             width: 120px; height: 120px; border: 4px dashed #1976D2; border-radius: 20px;
             display: flex; justify-content: center; align-items: center; background: #E3F2FD;
         }
-        .dot-zones { display: flex; justify-content: center; gap: 60px; }
-        .dot-zone {
-            width: 150px; min-height: 100px; border: 2px dashed #9E9E9E; border-radius: 10px;
-            display: flex; flex-wrap: wrap; gap: 5px; padding: 10px; align-content: flex-start;
-        }
         .bottom-tools { display: flex; justify-content: center; gap: 50px; margin-top: 20px; background: #fff; padding: 20px; border-radius: 20px;}
-        .draggable-dot {
-            width: 30px; height: 30px; border-radius: 50%; background: #E53935; cursor: grab;
-        }
         .draggable-num {
             width: 80px; height: 80px; background: #4FC3F7; border-radius: 10px; font-size: 3rem;
             display: flex; justify-content: center; align-items: center; cursor: grab; color: #fff; font-weight: bold;
         }
+
+        /* Subtraction Items Styles */
+        .game-item {
+            font-size: 5rem;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s, filter 0.2s;
+            position: relative;
+            margin: 0 5px;
+        }
+        .game-item:active { transform: scale(0.9); }
+        .game-item.crossed {
+            opacity: 0.4;
+            filter: grayscale(100%);
+        }
+        .game-item.crossed::after {
+            content: '❌';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            opacity: 1;
+        }
+        .game-item.highlighted {
+            filter: drop-shadow(0 0 10px #FFCA28);
+            transform: scale(1.1);
+            background: rgba(255, 235, 59, 0.3);
+            border-radius: 50%;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+        .shake { animation: shake 0.4s; }
 
         /* New Page 15 Styles */
         .wp-text { font-size: 2.5rem; max-width: 800px; line-height: 1.4; margin-bottom: 20px; }
@@ -233,7 +264,7 @@
 
         <div id="page6" class="page"><h1>Warm Up</h1></div>
         <div id="page7" class="page"><div id="p7-display" class="huge-text">1</div></div>
-        <div id="page8" class="page"><div id="p8-display" class="huge-text">50</div></div>
+        <div id="page8" class="page"><div id="p8-display" class="huge-text">60</div></div>
         <div id="page9" class="page"><h1>Ready for the test?</h1></div>
 
         <div id="page10" class="page">
@@ -242,35 +273,28 @@
             <button id="pause-btn-10" class="btn-pause" onclick="togglePause()">⏸ Pause</button>
         </div>
 
-        <div id="page11" class="page"><h1>Addition Facts</h1></div>
+        <div id="page11" class="page"><h1>Subtraction Facts</h1></div>
 
         <div id="page12" class="page">
             <div id="p12-eq" class="huge-text"></div>
             <button id="pause-btn-12" class="btn-pause" onclick="togglePause()">⏸ Pause</button>
         </div>
 
-        <div id="page13" class="page"><h1>Addition within 10</h1></div>
+        <div id="page13" class="page"><h1>Subtraction within 10</h1></div>
 
         <div id="page14" class="page">
             <div id="game-board">
                 <div class="equation-row">
-                    <div id="game-n1" class="number-circle">1</div>
-                    <div>+</div>
-                    <div id="game-n2" class="number-circle">1</div>
+                    <div id="game-n1" class="number-circle">7</div>
+                    <div>-</div>
+                    <div id="game-n2" class="number-circle">5</div>
                     <div>=</div>
-                    <div id="game-ans-box" class="answer-box" ondrop="drop(event, 'answer')" ondragover="allowDrop(event)">?</div>
+                    <div id="game-ans-box" class="answer-box" ondrop="dropSub(event)" ondragover="allowDrop(event)">?</div>
                 </div>
-                <div class="dot-zones">
-                    <div id="zone1" class="dot-zone" ondrop="drop(event, 'zone1')" ondragover="allowDrop(event)"></div>
-                    <div id="zone2" class="dot-zone" ondrop="drop(event, 'zone2')" ondragover="allowDrop(event)"></div>
+                <h3 id="game-instruction" style="margin:0; font-size: 2rem;">Touch from the right to cross out!</h3>
+                <div id="item-container" style="display: flex; justify-content: center; flex-wrap: wrap; padding: 10px; min-height: 120px;">
                 </div>
-                <h3>Drag dots to match, then drag the answer!</h3>
                 <div class="bottom-tools">
-                    <div style="text-align: center;">
-                        <div class="draggable-dot" draggable="true" ondragstart="drag(event, 'dot', 1)"></div>
-                        <span style="font-size: 14px;">Dot</span>
-                    </div>
-                    <div style="width: 50px;"></div>
                     <div id="opt1" class="draggable-num" draggable="true" ondragstart="drag(event, 'num', this.innerText)">2</div>
                     <div id="opt2" class="draggable-num" draggable="true" ondragstart="drag(event, 'num', this.innerText)">3</div>
                     <div id="opt3" class="draggable-num" draggable="true" ondragstart="drag(event, 'num', this.innerText)">4</div>
@@ -376,7 +400,7 @@
             if (page === 6) { speakText("Warm Up"); } 
             else if (page === 7) {
                 while(activeRunId === currentRun) {
-                    for(let i=1; i<=5; i++) {
+                    for(let i=1; i<=6; i++) {
                         if (activeRunId !== currentRun) break;
                         document.getElementById('p7-display').innerText = i;
                         speakText(i.toString());
@@ -386,7 +410,7 @@
             }
             else if (page === 8) {
                 while(activeRunId === currentRun) {
-                    for(let i=50; i<=60; i++) {
+                    for(let i=60; i<=70; i++) {
                         if (activeRunId !== currentRun) break;
                         document.getElementById('p8-display').innerText = i;
                         speakText(i.toString());
@@ -396,7 +420,7 @@
             }
             else if (page === 9) { speakText("Ready for the test?"); }
             else if (page === 10) {
-                const pool = [50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60];
+                const pool = [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70];
                 while(activeRunId === currentRun) {
                     const target = pool[Math.floor(Math.random() * pool.length)];
                     document.getElementById('p10-num').innerText = target;
@@ -420,48 +444,75 @@
                     await delay(2000, currentRun); 
                 }
             }
-            else if (page === 11) { speakText("Addition Facts"); }
+            else if (page === 11) { speakText("Subtraction Facts"); }
             else if (page === 12) {
-                for(let i=1; i<=10; i++) {
+                for(let i=2; i<=11; i++) {
                     if (activeRunId !== currentRun) return;
-                    document.getElementById('p12-eq').innerText = `${i} + 1 = ?`;
-                    speakText(`${i} plus one equals`);
+                    document.getElementById('p12-eq').innerText = `${i} - 1 = ?`;
+                    speakText(`${i} minus one equals`);
                     await delay(2000, currentRun);
                     if (activeRunId !== currentRun) return;
-                    document.getElementById('p12-eq').innerText = `${i} + 1 = ${i+1}`;
-                    speakText(`${i+1}`);
+                    document.getElementById('p12-eq').innerText = `${i} - 1 = ${i-1}`;
+                    speakText(`${i-1}`);
                     await delay(2000, currentRun);
                 }
             }
-            else if (page === 13) { speakText("Addition within 10"); }
+            else if (page === 13) { speakText("Subtraction within 10"); }
             else if (page === 14) { initGame(); }
             else if (page === 15) { initPage15(); }
             else if (page === 16) { speakText("Rotation Time"); }
         }
 
-        // --- Drag and Drop Math Game (Page 14) Logic ---
-        let isEasyTurn = true;
-        let currentGameTarget = 0;
+        // --- Drag and Drop Subtraction Game (Page 14) Logic ---
+        let p14_n1, p14_n2, p14_target;
+        let crossedCount = 0;
+        let highlightedCount = 0;
+        let canCross = true;
+        let canHighlight = false;
+        const itemEmojis = ['🍦', '🍕', '🧁', '🍎', '🍩', '🍔', '🍓'];
 
         function initGame() {
-            document.getElementById('zone1').innerHTML = "";
-            document.getElementById('zone2').innerHTML = "";
-            document.getElementById('game-ans-box').innerText = "?";
-            document.getElementById('game-ans-box').style.background = "#E3F2FD";
+            // Setup numbers
+            p14_n1 = Math.floor(Math.random() * 6) + 5; // Range: 5 to 10
+            p14_n2 = Math.floor(Math.random() * (p14_n1 - 1)) + 1; // Range: 1 to n1-1
+            p14_target = p14_n1 - p14_n2;
+            
+            crossedCount = 0;
+            highlightedCount = 0;
+            canCross = true;
+            canHighlight = false;
 
-            let n1 = isEasyTurn ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 3) + 5; 
-            let n2 = isEasyTurn ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 3) + 4; 
-            isEasyTurn = !isEasyTurn; 
-            currentGameTarget = n1 + n2;
+            document.getElementById('game-n1').innerText = p14_n1;
+            document.getElementById('game-n2').innerText = p14_n2;
+            
+            let ansBox = document.getElementById('game-ans-box');
+            ansBox.innerText = "?";
+            ansBox.style.background = "#E3F2FD";
+            ansBox.classList.remove('shake');
+            
+            document.getElementById('game-instruction').innerText = "Touch from the right to cross out!";
 
-            document.getElementById('game-n1').innerText = n1;
-            document.getElementById('game-n2').innerText = n2;
+            // Setup Items
+            let container = document.getElementById('item-container');
+            container.innerHTML = "";
+            let selectedItem = itemEmojis[Math.floor(Math.random() * itemEmojis.length)];
 
-            let options = [currentGameTarget];
+            for(let i=0; i<p14_n1; i++) {
+                let div = document.createElement('div');
+                div.className = 'game-item';
+                div.innerText = selectedItem;
+                div.dataset.index = i;
+                div.onclick = () => handleItemTouch(i, div);
+                container.appendChild(div);
+            }
+
+            // Setup Drag Options
+            let options = [p14_target];
             while(options.length < 3) {
-                let offset = Math.floor(Math.random() * 5) - 2; 
-                let fakeAns = currentGameTarget + offset;
-                if (fakeAns > 0 && !options.includes(fakeAns)) { options.push(fakeAns); }
+                let fakeAns = Math.floor(Math.random() * 10);
+                if (fakeAns !== p14_target && fakeAns >= 0 && !options.includes(fakeAns)) { 
+                    options.push(fakeAns); 
+                }
             }
             options.sort(() => Math.random() - 0.5);
             
@@ -470,34 +521,66 @@
             document.getElementById('opt3').innerText = options[2];
         }
 
+        function handleItemTouch(index, element) {
+            if (canCross) {
+                // Must touch the right-most available item
+                let expectedIndex = p14_n1 - 1 - crossedCount;
+                if (index === expectedIndex) {
+                    element.classList.add('crossed');
+                    crossedCount++;
+                    speakText(crossedCount.toString());
+                    
+                    if (crossedCount === p14_n2) {
+                        canCross = false;
+                        canHighlight = true;
+                        document.getElementById('game-instruction').innerText = "Now touch the rest from the left to count!";
+                    }
+                }
+            } else if (canHighlight) {
+                // Must touch the left-most available uncrossed item
+                let expectedIndex = highlightedCount;
+                if (index === expectedIndex) {
+                    element.classList.add('highlighted');
+                    highlightedCount++;
+                    speakText(highlightedCount.toString());
+                    
+                    if (highlightedCount === p14_target) {
+                        canHighlight = false;
+                        document.getElementById('game-instruction').innerText = "Drag the correct answer!";
+                    }
+                }
+            }
+        }
+
         function allowDrop(ev) { ev.preventDefault(); }
+        
         function drag(ev, type, value) {
             ev.dataTransfer.setData("type", type);
             ev.dataTransfer.setData("value", value);
         }
 
-        function drop(ev, targetZone) {
+        function dropSub(ev) {
             ev.preventDefault();
             let type = ev.dataTransfer.getData("type");
             let value = ev.dataTransfer.getData("value");
 
-            if (type === 'dot' && (targetZone === 'zone1' || targetZone === 'zone2')) {
-                let dot = document.createElement('div');
-                dot.className = 'draggable-dot';
-                dot.style.cursor = 'default';
-                document.getElementById(targetZone).appendChild(dot);
-            } 
-            else if (type === 'num' && targetZone === 'answer') {
+            if (type === 'num') {
                 let numValue = parseInt(value);
                 let ansBox = document.getElementById('game-ans-box');
                 
-                if (numValue === currentGameTarget) {
+                if (numValue === p14_target) {
                     ansBox.innerText = value;
                     ansBox.style.background = "#A5D6A7"; 
-                    speakText("Great job! " + document.getElementById('game-n1').innerText + " plus " + document.getElementById('game-n2').innerText + " is " + value);
-                    setTimeout(initGame, 4000); 
+                    ansBox.classList.remove('shake');
+                    speakText("Correct! Great job!");
+                    setTimeout(initGame, 3500); 
                 } else {
-                    ansBox.style.background = "#EF9A9A"; 
+                    ansBox.innerText = "?";
+                    ansBox.style.background = "#EF9A9A";
+                    ansBox.classList.remove('shake');
+                    // Force reflow to restart animation
+                    void ansBox.offsetWidth;
+                    ansBox.classList.add('shake');
                     speakText("Try again!");
                     setTimeout(() => { ansBox.style.background = "#E3F2FD"; }, 1000);
                 }
