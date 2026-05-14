@@ -187,7 +187,7 @@
         .shake { animation: shake 0.4s; }
 
         /* Story Page Styles */
-        .wp-text { font-size: 2.5rem; max-width: 800px; line-height: 1.4; margin-bottom: 20px; }
+        .wp-text { font-size: 2.5rem; max-width: 800px; line-height: 1.4; margin-bottom: 20px; text-align: left; }
         .equation-inputs { display: flex; align-items: center; justify-content: center; font-size: 4rem; gap: 15px; margin-bottom: 15px; }
         
         .circle-drop {
@@ -201,29 +201,9 @@
             display: flex; justify-content: center; align-items: center; cursor: grab; color: #333; font-weight: bold; border: 3px solid #FF8F00;
         }
 
-        /* Ten Block Square Style */
-        .ten-square {
-            width: 100px;
-            height: 100px;
-            background-color: #4FC3F7;
-            border: 4px solid #0288D1;
-            border-radius: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 4rem;
-            font-weight: bold;
-            color: #fff;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            transition: transform 0.1s;
-            user-select: none;
-        }
-        .ten-square:active { transform: scale(0.95); }
-        
         #drawing-canvas {
-            border: 3px dashed #9E9E9E; background: #fff; border-radius: 15px;
-            cursor: crosshair; touch-action: none;
+            border: 3px solid #1976D2; background: #fff; border-radius: 10px;
+            cursor: crosshair; touch-action: none; width: 100%; max-width: 500px;
         }
         
         .btn-check {
@@ -235,6 +215,33 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
         .btn-check:hover { background-color: #388E3C; }
+
+        /* Page 17 specific layout */
+        .p17-layout {
+            display: flex;
+            width: 100%;
+            max-width: 1100px;
+            gap: 40px;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+        .p17-left {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .p17-right {
+            flex: 0.8;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            font-size: 6rem;
+            background: #fff;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body>
@@ -314,29 +321,31 @@
         </div>
 
         <div id="page17" class="page">
-            <div id="p17-story" class="wp-text"></div>
-            
-            <div class="bottom-tools" id="p17-draggables" style="margin-top: 0; margin-bottom: 20px; padding: 15px; gap: 30px;">
+            <div class="p17-layout">
+                <div class="p17-left">
+                    <div id="p17-story" class="wp-text"></div>
+                    
+                    <div class="bottom-tools" id="p17-draggables" style="margin-top: 0; margin-bottom: 20px; padding: 15px; gap: 30px; background: transparent;">
+                    </div>
+
+                    <div class="equation-inputs">
+                        <div id="p17-drop1" class="circle-drop" ondrop="dropP17(event, 'drop1')" ondragover="allowDrop(event)"></div>
+                        <span>-</span>
+                        <div id="p17-drop2" class="circle-drop" ondrop="dropP17(event, 'drop2')" ondragover="allowDrop(event)"></div>
+                        <span>=</span>
+                        <div id="p17-drop3" class="circle-drop" ondrop="dropP17(event, 'drop3')" ondragover="allowDrop(event)"></div>
+                    </div>
+
+                    <button class="btn-check" onclick="checkP17()">✔️ Check</button>
+
+                    <h3 style="margin: 15px 0 5px 0;">Draw lines and cross out from the right</h3>
+                    <canvas id="drawing-canvas" width="500" height="150"></canvas>
+                    <button class="btn-pause" style="margin-top: 15px; padding: 10px 30px; font-size: 1.2rem;" onclick="clearCanvas()">🗑️ Clear Drawing</button>
                 </div>
-
-            <div class="equation-inputs">
-                <div id="p17-drop1" class="circle-drop" ondrop="dropP17(event, 'drop1')" ondragover="allowDrop(event)"></div>
-                <span>+</span>
-                <div id="p17-drop2" class="circle-drop" ondrop="dropP17(event, 'drop2')" ondragover="allowDrop(event)"></div>
-                <span>=</span>
-                <div id="p17-drop3" class="circle-drop" ondrop="dropP17(event, 'drop3')" ondragover="allowDrop(event)"></div>
+                <div class="p17-right" id="p17-visuals">
+                    <!-- Dynamic Emojis populated by JS -->
+                </div>
             </div>
-
-            <button class="btn-check" onclick="checkP17()">✔️ Check</button>
-
-            <h3 style="margin: 5px 0;">Touch the 10, then draw lines to count on:</h3>
-            
-            <div style="display: flex; gap: 20px; align-items: center; justify-content: center;">
-                <div class="ten-square" onclick="speakText('10')">10</div>
-                <canvas id="drawing-canvas" width="480" height="200"></canvas>
-            </div>
-            
-            <button class="btn-pause" style="margin-top: 15px; padding: 10px 30px; font-size: 1.2rem;" onclick="clearCanvas()">🗑️ Clear Drawing</button>
         </div>
 
         <div id="page18" class="page">
@@ -507,7 +516,6 @@
         }
 
         function handleP14Touch(index, element) {
-            // Must touch from the right to left
             let expectedIndex = p14_targetCount - 1 - p14_crossedCount;
             if (index === expectedIndex && !element.classList.contains('crossed')) {
                 element.classList.add('crossed');
@@ -531,7 +539,6 @@
         let canHighlight = false;
 
         function initPage16() {
-            // Setup numbers
             p16_n1 = Math.floor(Math.random() * 6) + 5; // Range: 5 to 10
             p16_n2 = Math.floor(Math.random() * (p16_n1 - 1)) + 1; // Range: 1 to n1-1
             p16_target = p16_n1 - p16_n2;
@@ -551,7 +558,6 @@
             
             document.getElementById('game-instruction').innerText = "Touch from the right to cross out!";
 
-            // Setup Items
             let container = document.getElementById('item-container');
             container.innerHTML = "";
             let selectedItem = itemEmojis[Math.floor(Math.random() * itemEmojis.length)];
@@ -565,7 +571,6 @@
                 container.appendChild(div);
             }
 
-            // Setup Drag Options
             let options = [p16_target];
             while(options.length < 3) {
                 let fakeAns = Math.floor(Math.random() * 10);
@@ -582,7 +587,6 @@
 
         function handleItemTouch(index, element) {
             if (canCross) {
-                // Must touch the right-most available item
                 let expectedIndex = p16_n1 - 1 - crossedCount;
                 if (index === expectedIndex) {
                     element.classList.add('crossed');
@@ -596,7 +600,6 @@
                     }
                 }
             } else if (canHighlight) {
-                // Must touch the left-most available uncrossed item
                 let expectedIndex = highlightedCount;
                 if (index === expectedIndex) {
                     element.classList.add('highlighted');
@@ -637,7 +640,6 @@
                     ansBox.innerText = "?";
                     ansBox.style.background = "#EF9A9A";
                     ansBox.classList.remove('shake');
-                    // Force reflow to restart animation
                     void ansBox.offsetWidth;
                     ansBox.classList.add('shake');
                     speakText("Try again!");
@@ -646,32 +648,40 @@
             }
         }
 
-        // --- Page 17 Interactive Story Logic ---
+        // --- Page 17 Subtraction Interactive Story Logic ---
         let p17_n1, p17_n2, p17_total;
-        const storyNames = ["Mini", "Sam", "Leo", "Mia", "Zoe", "Max", "Ava"];
+        const storyNames = ["Mia", "Sam", "Leo", "Ava", "Zoe", "Max", "Noah"];
         
-        const storyThemes = [
-            { items: ["ice creams", "apples", "cookies", "candies", "cupcakes"], actions: ["ate", "bought", "got"] },
-            { items: ["stickers", "pencils", "marbles", "blocks", "cards"], actions: ["found", "bought", "got", "collected"] }
+        const subThemes = [
+            { item: "balloons", emoji: "🎈", action1: "had", action2: "flew away", question: "does" },
+            { item: "apples", emoji: "🍎", action1: "picked", action2: "ate", question: "does" },
+            { item: "cookies", emoji: "🍪", action1: "baked", action2: "gave away", question: "does" },
+            { item: "birds", emoji: "🐦", action1: "saw", action2: "flew away", question: "did" },
+            { item: "candy", emoji: "🍬", action1: "had", action2: "ate", question: "does" }
         ];
 
         function initPage17() {
-            // First number is always 10
-            p17_n1 = 10;
-            // Second number is between 1 and 5
-            p17_n2 = Math.floor(Math.random() * 5) + 1;
+            // First number between 5 and 10
+            p17_n1 = Math.floor(Math.random() * 6) + 5;
+            // Second number between 1 and n1-1
+            p17_n2 = Math.floor(Math.random() * (p17_n1 - 1)) + 1;
+            p17_total = p17_n1 - p17_n2;
             
-            let name1 = storyNames[Math.floor(Math.random() * storyNames.length)];
-            let name2 = storyNames[Math.floor(Math.random() * storyNames.length)];
-            while(name1 === name2) name2 = storyNames[Math.floor(Math.random() * storyNames.length)];
-            
-            let theme = storyThemes[Math.floor(Math.random() * storyThemes.length)];
-            let item = theme.items[Math.floor(Math.random() * theme.items.length)];
-            let action = theme.actions[Math.floor(Math.random() * theme.actions.length)];
+            let name = storyNames[Math.floor(Math.random() * storyNames.length)];
+            let theme = subThemes[Math.floor(Math.random() * subThemes.length)];
 
-            document.getElementById('p17-story').innerText = `${name1} ${action} ${p17_n1} ${item}. ${name2} ${action} ${p17_n2} ${item}. How many did they have all together?`;
+            document.getElementById('p17-story').innerText = `${name} ${theme.action1} ${p17_n1} ${theme.item}. ${p17_n2} ${theme.item} ${theme.action2}. How many ${theme.item} ${theme.question} ${name} have left?`;
             speakText(document.getElementById('p17-story').innerText);
-            p17_total = p17_n1 + p17_n2;
+
+            // Populate visual items grid
+            let visualsContainer = document.getElementById('p17-visuals');
+            visualsContainer.innerHTML = "";
+            for(let i=0; i < p17_n1; i++) {
+                let div = document.createElement('div');
+                div.innerText = theme.emoji;
+                div.style.textAlign = 'center';
+                visualsContainer.appendChild(div);
+            }
 
             // Reset drop zones
             ['drop1', 'drop2', 'drop3'].forEach(id => {
@@ -684,8 +694,7 @@
             // Set up draggables with a distractor
             let distractor;
             do {
-                // Generates a random number that isn't the correct answer or 10
-                distractor = Math.floor(Math.random() * 10) + 6; 
+                distractor = Math.floor(Math.random() * 10) + 1; 
             } while (distractor === p17_n1 || distractor === p17_n2 || distractor === p17_total);
             
             let draggables = [p17_n1, p17_n2, p17_total, distractor];
@@ -728,7 +737,8 @@
             v2 = parseInt(v2);
             v3 = parseInt(v3);
 
-            let isCorrect = ((v1 === p17_n1 && v2 === p17_n2) || (v1 === p17_n2 && v2 === p17_n1)) && (v3 === p17_total);
+            // Subtraction logic: order matters
+            let isCorrect = (v1 === p17_n1) && (v2 === p17_n2) && (v3 === p17_total);
 
             if (isCorrect) {
                 ['drop1', 'drop2', 'drop3'].forEach(id => {
@@ -758,7 +768,7 @@
         let isDrawing = false;
         ctx.lineWidth = 4;
         ctx.lineCap = 'round';
-        ctx.strokeStyle = '#1976D2';
+        ctx.strokeStyle = '#333';
 
         function getMousePos(canvas, evt) {
             const rect = canvas.getBoundingClientRect();
