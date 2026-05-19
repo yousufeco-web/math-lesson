@@ -270,8 +270,8 @@
         </div>
 
         <div id="page6" class="page"><h1>Warm Up</h1></div>
-        <div id="page7" class="page"><div id="p7-display" class="huge-text">1</div></div>
-        <div id="page8" class="page"><div id="p8-display" class="huge-text">60</div></div>
+        <div id="page7" class="page"><div id="p7-display" class="huge-text">2</div></div>
+        <div id="page8" class="page"><div id="p8-display" class="huge-text">70</div></div>
         <div id="page9" class="page"><h1>Ready for the test?</h1></div>
 
         <div id="page10" class="page">
@@ -423,7 +423,8 @@
             if (page === 6) { speakText("Warm Up"); } 
             else if (page === 7) {
                 while(activeRunId === currentRun) {
-                    for(let i=1; i<=6; i++) {
+                    // Changed to count from 2 to 7
+                    for(let i=2; i<=7; i++) {
                         if (activeRunId !== currentRun) break;
                         document.getElementById('p7-display').innerText = i;
                         speakText(i.toString());
@@ -433,7 +434,8 @@
             }
             else if (page === 8) {
                 while(activeRunId === currentRun) {
-                    for(let i=60; i<=70; i++) {
+                    // Changed to count from 70 to 80
+                    for(let i=70; i<=80; i++) {
                         if (activeRunId !== currentRun) break;
                         document.getElementById('p8-display').innerText = i;
                         speakText(i.toString());
@@ -443,7 +445,8 @@
             }
             else if (page === 9) { speakText("Ready for the test?"); }
             else if (page === 10) {
-                const pool = [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70];
+                // Changed pool to 70-80
+                const pool = [70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80];
                 while(activeRunId === currentRun) {
                     const target = pool[Math.floor(Math.random() * pool.length)];
                     document.getElementById('p10-num').innerText = target;
@@ -469,8 +472,11 @@
             }
             else if (page === 11) { speakText("Subtraction Facts"); }
             else if (page === 12) {
-                for(let i=2; i<=11; i++) {
-                    if (activeRunId !== currentRun) return;
+                // Specific rolling sequence
+                const seq = [2, 4, 6, 8, 10, 3, 5, 7, 9, 11];
+                let index = 0;
+                while(activeRunId === currentRun) {
+                    let i = seq[index];
                     document.getElementById('p12-eq').innerText = `${i} - 1 = ?`;
                     speakText(`${i} minus one equals`);
                     await delay(2000, currentRun);
@@ -478,6 +484,7 @@
                     document.getElementById('p12-eq').innerText = `${i} - 1 = ${i-1}`;
                     speakText(`${i-1}`);
                     await delay(2000, currentRun);
+                    index = (index + 1) % seq.length; // Keep rolling
                 }
             }
             else if (page === 13) { speakText("SUBTRACTION. Subtraction means Take away."); }
@@ -650,14 +657,25 @@
 
         // --- Page 17 Subtraction Interactive Story Logic ---
         let p17_n1, p17_n2, p17_total;
-        const storyNames = ["Mia", "Sam", "Leo", "Ava", "Zoe", "Max", "Noah"];
         
+        // Added pronoun mappings to ensure grammatical correctness
+        const storyNames = [
+            { name: "Mia", pronoun: "She" },
+            { name: "Sam", pronoun: "He" },
+            { name: "Leo", pronoun: "He" },
+            { name: "Ava", pronoun: "She" },
+            { name: "Zoe", pronoun: "She" },
+            { name: "Max", pronoun: "He" },
+            { name: "Noah", pronoun: "He" }
+        ];
+        
+        // Differentiated action types (whether the person or the item performs the second action)
         const subThemes = [
-            { item: "balloons", emoji: "🎈", action1: "had", action2: "flew away", question: "does" },
-            { item: "apples", emoji: "🍎", action1: "picked", action2: "ate", question: "does" },
-            { item: "cookies", emoji: "🍪", action1: "baked", action2: "gave away", question: "does" },
-            { item: "birds", emoji: "🐦", action1: "saw", action2: "flew away", question: "did" },
-            { item: "candy", emoji: "🍬", action1: "had", action2: "ate", question: "does" }
+            { item: "balloons", emoji: "🎈", action1: "had", action2: "flew away", question: "does", type: "item" },
+            { item: "apples", emoji: "🍎", action1: "picked", action2: "ate", question: "does", type: "person" },
+            { item: "cookies", emoji: "🍪", action1: "baked", action2: "gave away", question: "does", type: "person" },
+            { item: "birds", emoji: "🐦", action1: "saw", action2: "flew away", question: "did", type: "item" },
+            { item: "candy", emoji: "🍬", action1: "had", action2: "ate", question: "does", type: "person" }
         ];
 
         function initPage17() {
@@ -667,10 +685,17 @@
             p17_n2 = Math.floor(Math.random() * (p17_n1 - 1)) + 1;
             p17_total = p17_n1 - p17_n2;
             
-            let name = storyNames[Math.floor(Math.random() * storyNames.length)];
+            let personObj = storyNames[Math.floor(Math.random() * storyNames.length)];
+            let name = personObj.name;
+            let pronoun = personObj.pronoun;
             let theme = subThemes[Math.floor(Math.random() * subThemes.length)];
 
-            document.getElementById('p17-story').innerText = `${name} ${theme.action1} ${p17_n1} ${theme.item}. ${p17_n2} ${theme.item} ${theme.action2}. How many ${theme.item} ${theme.question} ${name} have left?`;
+            // Determine grammatical structure based on the theme type
+            let sentence2 = theme.type === "person" 
+                ? `${pronoun} ${theme.action2} ${p17_n2} ${theme.item}.` 
+                : `${p17_n2} ${theme.item} ${theme.action2}.`;
+
+            document.getElementById('p17-story').innerText = `${name} ${theme.action1} ${p17_n1} ${theme.item}. ${sentence2} How many ${theme.item} ${theme.question} ${name} have left?`;
             speakText(document.getElementById('p17-story').innerText);
 
             // Populate visual items grid
