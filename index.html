@@ -130,118 +130,103 @@
         }
         .btn-pause:hover { background-color: #FFA000; }
 
-        /* Drag and Drop Game Styles */
-        #game-board { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 30px; }
-        .equation-row { display: flex; justify-content: center; align-items: center; font-size: 4rem; gap: 20px; }
-        .number-circle { 
-            width: 100px; height: 100px; border-radius: 50%; background: #FFCA28; 
-            display: flex; justify-content: center; align-items: center; border: 4px solid #FF8F00;
-        }
-        .answer-box {
-            width: 120px; height: 120px; border: 4px dashed #1976D2; border-radius: 20px;
-            display: flex; justify-content: center; align-items: center; background: #E3F2FD;
-        }
-        .bottom-tools { display: flex; justify-content: center; gap: 50px; margin-top: 20px; background: #fff; padding: 20px; border-radius: 20px;}
-        .draggable-num {
-            width: 80px; height: 80px; background: #4FC3F7; border-radius: 10px; font-size: 3rem;
-            display: flex; justify-content: center; align-items: center; cursor: grab; color: #fff; font-weight: bold;
-        }
-
-        /* Subtraction Items Styles */
-        .game-item {
-            font-size: 5rem;
-            cursor: pointer;
-            user-select: none;
-            transition: transform 0.2s, filter 0.2s;
-            position: relative;
-            margin: 0 5px;
-        }
-        .game-item:active { transform: scale(0.9); }
-        .game-item.crossed {
-            opacity: 0.4;
-            filter: grayscale(100%);
-        }
-        .game-item.crossed::after {
-            content: '❌';
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 4rem;
-            opacity: 1;
-        }
-        .game-item.highlighted {
-            filter: drop-shadow(0 0 10px #FFCA28);
-            transform: scale(1.1);
-            background: rgba(255, 235, 59, 0.3);
-            border-radius: 50%;
-        }
-
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            50% { transform: translateX(10px); }
-            75% { transform: translateX(-10px); }
-            100% { transform: translateX(0); }
-        }
-        .shake { animation: shake 0.4s; }
-
-        /* Story Page Styles */
-        .wp-text { font-size: 2.5rem; max-width: 800px; line-height: 1.4; margin-bottom: 20px; text-align: left; }
-        .equation-inputs { display: flex; align-items: center; justify-content: center; font-size: 4rem; gap: 15px; margin-bottom: 15px; }
-        
-        .circle-drop {
-            width: 80px; height: 80px; border-radius: 50%; border: 4px dashed #FF8F00;
-            display: flex; justify-content: center; align-items: center; background: #fff;
-            font-size: 3rem; font-weight: bold;
-        }
-        
-        .p17-drag-num {
-            width: 70px; height: 70px; background: #FFCA28; border-radius: 50%; font-size: 2.5rem;
-            display: flex; justify-content: center; align-items: center; cursor: grab; color: #333; font-weight: bold; border: 3px solid #FF8F00;
-        }
-
-        #drawing-canvas {
-            border: 3px solid #1976D2; background: #fff; border-radius: 10px;
-            cursor: crosshair; touch-action: none; width: 100%; max-width: 500px;
-        }
-        
-        .btn-check {
-            background-color: #4CAF50;
-            color: white;
-            font-size: 1.8rem;
-            padding: 10px 40px;
+        /* Sequence Drag and Drop (Page 11) */
+        .seq-row {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
             margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            font-size: 3rem;
+            align-items: center;
         }
-        .btn-check:hover { background-color: #388E3C; }
-
-        /* Page 17 specific layout */
-        .p17-layout {
+        .seq-num {
+            width: 90px;
+            height: 90px;
             display: flex;
-            width: 100%;
-            max-width: 1100px;
+            justify-content: center;
+            align-items: center;
+            background: #FFF9C4;
+            border-radius: 15px;
+            border: 4px solid #FBC02D;
+            font-weight: bold;
+            color: #333;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .seq-drop-box {
+            width: 90px;
+            height: 90px;
+            border: 4px dashed #1976D2;
+            border-radius: 15px;
+            background: #E3F2FD;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 3rem;
+            color: #1976D2;
+        }
+        .seq-filled {
+            background: #A5D6A7;
+            border: 4px solid #388E3C;
+            border-style: solid;
+            color: #1B5E20;
+        }
+        .seq-drag-num {
+            width: 90px;
+            height: 90px;
+            background: #FFCA28;
+            border-radius: 15px;
+            font-size: 3rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: grab;
+            color: #333;
+            font-weight: bold;
+            border: 4px solid #FF8F00;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .bottom-tools {
+            display: flex;
+            justify-content: center;
             gap: 40px;
-            align-items: flex-start;
-            justify-content: space-between;
-        }
-        .p17-left {
-            flex: 1.2;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-        .p17-right {
-            flex: 0.8;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            font-size: 6rem;
+            margin-top: 30px;
             background: #fff;
-            padding: 20px;
+            padding: 20px 40px;
             border-radius: 20px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+
+        /* Number Grid (Page 12) */
+        .num-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .grid-num {
+            width: 120px;
+            height: 120px;
+            font-size: 4rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #4FC3F7;
+            border-radius: 20px;
+            border: 5px solid #0288D1;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        @keyframes popping {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        .popping { animation: popping 0.4s; }
     </style>
 </head>
 <body>
@@ -270,8 +255,11 @@
         </div>
 
         <div id="page6" class="page"><h1>Warm Up</h1></div>
-        <div id="page7" class="page"><div id="p7-display" class="huge-text">2</div></div>
-        <div id="page8" class="page"><div id="p8-display" class="huge-text">70</div></div>
+        
+        <div id="page7" class="page"><div id="p7-display" class="huge-text">1</div></div>
+        
+        <div id="page8" class="page"><div id="p8-display" class="huge-text">80</div></div>
+        
         <div id="page9" class="page"><h1>Ready for the test?</h1></div>
 
         <div id="page10" class="page">
@@ -280,76 +268,32 @@
             <button id="pause-btn-10" class="btn-pause" onclick="togglePause()">⏸ Pause</button>
         </div>
 
-        <div id="page11" class="page"><h1>Subtraction Facts</h1></div>
+        <div id="page11" class="page">
+            <h2>Complete the Sequence</h2>
+            <div id="seq-container">
+                </div>
+            <div id="seq-options" class="bottom-tools">
+                </div>
+        </div>
 
         <div id="page12" class="page">
-            <div id="p12-eq" class="huge-text"></div>
-            <button id="pause-btn-12" class="btn-pause" onclick="togglePause()">⏸ Pause</button>
-        </div>
-
-        <div id="page13" class="page">
-            <h1 class="giant-text" style="color: #E53935; font-size: 10rem;">SUBTRACTION</h1>
-            <h2 style="font-size: 4rem; color: #333;">Subtraction means Take away</h2>
-        </div>
-
-        <div id="page14" class="page">
-            <h2>Take away <span id="p14-num" style="color: #D32F2F; font-weight: bold;"></span> by crossing <span id="p14-num2" style="color: #D32F2F; font-weight: bold;"></span></h2>
-            <div id="p14-item-container" style="display: flex; justify-content: center; flex-wrap: wrap; padding: 20px; min-height: 150px; gap: 20px; margin-top: 40px;">
+            <h2>Count by 5s</h2>
+            <div class="num-grid">
+                <div class="grid-num clickable" onclick="speakText('5')">5</div>
+                <div class="grid-num clickable" onclick="speakText('10')">10</div>
+                <div class="grid-num clickable" onclick="speakText('15')">15</div>
+                <div class="grid-num clickable" onclick="speakText('20')">20</div>
+                
+                <div class="grid-num clickable" onclick="speakText('25')">25</div>
+                <div class="grid-num clickable" onclick="speakText('30')">30</div>
+                <div class="grid-num clickable" onclick="speakText('35')">35</div>
+                <div class="grid-num clickable" onclick="speakText('40')">40</div>
+                
+                <div class="grid-num clickable" onclick="speakText('45')">45</div>
+                <div class="grid-num clickable" onclick="speakText('50')">50</div>
+                <div class="grid-num clickable" onclick="speakText('55')">55</div>
+                <div class="grid-num clickable" onclick="speakText('60')">60</div>
             </div>
-        </div>
-
-        <div id="page15" class="page"><h1>Subtraction within 10</h1></div>
-
-        <div id="page16" class="page">
-            <div id="game-board">
-                <div class="equation-row">
-                    <div id="game-n1" class="number-circle">7</div>
-                    <div>-</div>
-                    <div id="game-n2" class="number-circle">5</div>
-                    <div>=</div>
-                    <div id="game-ans-box" class="answer-box" ondrop="dropSub(event)" ondragover="allowDrop(event)">?</div>
-                </div>
-                <h3 id="game-instruction" style="margin:0; font-size: 2rem;">Touch from the right to cross out!</h3>
-                <div id="item-container" style="display: flex; justify-content: center; flex-wrap: wrap; padding: 10px; min-height: 120px;">
-                </div>
-                <div class="bottom-tools">
-                    <div id="opt1" class="draggable-num" draggable="true" ondragstart="drag(event, 'num', this.innerText)">2</div>
-                    <div id="opt2" class="draggable-num" draggable="true" ondragstart="drag(event, 'num', this.innerText)">3</div>
-                    <div id="opt3" class="draggable-num" draggable="true" ondragstart="drag(event, 'num', this.innerText)">4</div>
-                </div>
-            </div>
-        </div>
-
-        <div id="page17" class="page">
-            <div class="p17-layout">
-                <div class="p17-left">
-                    <div id="p17-story" class="wp-text"></div>
-                    
-                    <div class="bottom-tools" id="p17-draggables" style="margin-top: 0; margin-bottom: 20px; padding: 15px; gap: 30px; background: transparent;">
-                    </div>
-
-                    <div class="equation-inputs">
-                        <div id="p17-drop1" class="circle-drop" ondrop="dropP17(event, 'drop1')" ondragover="allowDrop(event)"></div>
-                        <span>-</span>
-                        <div id="p17-drop2" class="circle-drop" ondrop="dropP17(event, 'drop2')" ondragover="allowDrop(event)"></div>
-                        <span>=</span>
-                        <div id="p17-drop3" class="circle-drop" ondrop="dropP17(event, 'drop3')" ondragover="allowDrop(event)"></div>
-                    </div>
-
-                    <button class="btn-check" onclick="checkP17()">✔️ Check</button>
-
-                    <h3 style="margin: 15px 0 5px 0;">Draw lines and cross out from the right</h3>
-                    <canvas id="drawing-canvas" width="500" height="150"></canvas>
-                    <button class="btn-pause" style="margin-top: 15px; padding: 10px 30px; font-size: 1.2rem;" onclick="clearCanvas()">🗑️ Clear Drawing</button>
-                </div>
-                <div class="p17-right" id="p17-visuals">
-                    <!-- Dynamic Emojis populated by JS -->
-                </div>
-            </div>
-        </div>
-
-        <div id="page18" class="page">
-            <h1>Rotation Time</h1>
         </div>
     </div>
 
@@ -362,12 +306,9 @@
     <script>
         // --- State Management ---
         let currentPage = 1;
-        const totalPages = 18;
+        const totalPages = 12;
         let activeRunId = 0; 
         let isPaused = false;
-        
-        // Global item list
-        const itemEmojis = ['🍦', '🍕', '🧁', '🍎', '🍩', '🍔', '🍓'];
 
         // --- Speech Synthesis Utility ---
         function speakText(text, rate = 0.9) {
@@ -384,9 +325,7 @@
             else { window.speechSynthesis.resume(); }
 
             const btn10 = document.getElementById('pause-btn-10');
-            const btn12 = document.getElementById('pause-btn-12');
             if (btn10) btn10.innerText = isPaused ? "▶ Resume" : "⏸ Pause";
-            if (btn12) btn12.innerText = isPaused ? "▶ Resume" : "⏸ Pause";
         }
 
         const delay = async (ms, runId) => {
@@ -404,8 +343,10 @@
             currentPage += direction;
             activeRunId++; 
             isPaused = false;
-            document.getElementById('pause-btn-10').innerText = "⏸ Pause";
-            document.getElementById('pause-btn-12').innerText = "⏸ Pause";
+            
+            let p10Btn = document.getElementById('pause-btn-10');
+            if(p10Btn) p10Btn.innerText = "⏸ Pause";
+            
             window.speechSynthesis.resume(); 
             window.speechSynthesis.cancel(); 
 
@@ -423,8 +364,7 @@
             if (page === 6) { speakText("Warm Up"); } 
             else if (page === 7) {
                 while(activeRunId === currentRun) {
-                    // Changed to count from 2 to 7
-                    for(let i=2; i<=7; i++) {
+                    for(let i=1; i<=8; i++) {
                         if (activeRunId !== currentRun) break;
                         document.getElementById('p7-display').innerText = i;
                         speakText(i.toString());
@@ -434,8 +374,7 @@
             }
             else if (page === 8) {
                 while(activeRunId === currentRun) {
-                    // Changed to count from 70 to 80
-                    for(let i=70; i<=80; i++) {
+                    for(let i=80; i<=90; i++) {
                         if (activeRunId !== currentRun) break;
                         document.getElementById('p8-display').innerText = i;
                         speakText(i.toString());
@@ -445,8 +384,7 @@
             }
             else if (page === 9) { speakText("Ready for the test?"); }
             else if (page === 10) {
-                // Changed pool to 70-80
-                const pool = [70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80];
+                const pool = [80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90];
                 while(activeRunId === currentRun) {
                     const target = pool[Math.floor(Math.random() * pool.length)];
                     document.getElementById('p10-num').innerText = target;
@@ -470,156 +408,16 @@
                     await delay(2000, currentRun); 
                 }
             }
-            else if (page === 11) { speakText("Subtraction Facts"); }
+            else if (page === 11) {
+                initPage11();
+            }
             else if (page === 12) {
-                // Specific rolling sequence
-                const seq = [2, 4, 6, 8, 10, 3, 5, 7, 9, 11];
-                let index = 0;
-                while(activeRunId === currentRun) {
-                    let i = seq[index];
-                    document.getElementById('p12-eq').innerText = `${i} - 1 = ?`;
-                    speakText(`${i} minus one equals`);
-                    await delay(2000, currentRun);
-                    if (activeRunId !== currentRun) return;
-                    document.getElementById('p12-eq').innerText = `${i} - 1 = ${i-1}`;
-                    speakText(`${i-1}`);
-                    await delay(2000, currentRun);
-                    index = (index + 1) % seq.length; // Keep rolling
-                }
-            }
-            else if (page === 13) { speakText("SUBTRACTION. Subtraction means Take away."); }
-            else if (page === 14) { initPage14(); }
-            else if (page === 15) { speakText("Subtraction within 10"); }
-            else if (page === 16) { initPage16(); }
-            else if (page === 17) { initPage17(); }
-            else if (page === 18) { speakText("Rotation Time"); }
-        }
-
-        // --- Take Away Practice Logic (Page 14) ---
-        let p14_targetCount = 0;
-        let p14_crossedCount = 0;
-
-        function initPage14() {
-            p14_targetCount = Math.floor(Math.random() * 10) + 1; // 1 to 10
-            p14_crossedCount = 0;
-            
-            document.getElementById('p14-num').innerText = p14_targetCount;
-            document.getElementById('p14-num2').innerText = p14_targetCount;
-            
-            speakText(`Take away ${p14_targetCount} by crossing ${p14_targetCount}`);
-            
-            let container = document.getElementById('p14-item-container');
-            container.innerHTML = "";
-            let selectedItem = itemEmojis[Math.floor(Math.random() * itemEmojis.length)];
-            
-            for(let i = 0; i < p14_targetCount; i++) {
-                let div = document.createElement('div');
-                div.className = 'game-item';
-                div.innerText = selectedItem;
-                div.dataset.index = i;
-                div.onclick = () => handleP14Touch(i, div);
-                container.appendChild(div);
+                speakText("Count by fives");
             }
         }
 
-        function handleP14Touch(index, element) {
-            let expectedIndex = p14_targetCount - 1 - p14_crossedCount;
-            if (index === expectedIndex && !element.classList.contains('crossed')) {
-                element.classList.add('crossed');
-                p14_crossedCount++;
-                
-                speakText(p14_crossedCount.toString());
-                
-                if (p14_crossedCount === p14_targetCount) {
-                    setTimeout(() => {
-                        if (currentPage === 14) initPage14();
-                    }, 2000);
-                }
-            }
-        }
-
-        // --- Drag and Drop Subtraction Game (Page 16) Logic ---
-        let p16_n1, p16_n2, p16_target;
-        let crossedCount = 0;
-        let highlightedCount = 0;
-        let canCross = true;
-        let canHighlight = false;
-
-        function initPage16() {
-            p16_n1 = Math.floor(Math.random() * 6) + 5; // Range: 5 to 10
-            p16_n2 = Math.floor(Math.random() * (p16_n1 - 1)) + 1; // Range: 1 to n1-1
-            p16_target = p16_n1 - p16_n2;
-            
-            crossedCount = 0;
-            highlightedCount = 0;
-            canCross = true;
-            canHighlight = false;
-
-            document.getElementById('game-n1').innerText = p16_n1;
-            document.getElementById('game-n2').innerText = p16_n2;
-            
-            let ansBox = document.getElementById('game-ans-box');
-            ansBox.innerText = "?";
-            ansBox.style.background = "#E3F2FD";
-            ansBox.classList.remove('shake');
-            
-            document.getElementById('game-instruction').innerText = "Touch from the right to cross out!";
-
-            let container = document.getElementById('item-container');
-            container.innerHTML = "";
-            let selectedItem = itemEmojis[Math.floor(Math.random() * itemEmojis.length)];
-
-            for(let i=0; i<p16_n1; i++) {
-                let div = document.createElement('div');
-                div.className = 'game-item';
-                div.innerText = selectedItem;
-                div.dataset.index = i;
-                div.onclick = () => handleItemTouch(i, div);
-                container.appendChild(div);
-            }
-
-            let options = [p16_target];
-            while(options.length < 3) {
-                let fakeAns = Math.floor(Math.random() * 10);
-                if (fakeAns !== p16_target && fakeAns >= 0 && !options.includes(fakeAns)) { 
-                    options.push(fakeAns); 
-                }
-            }
-            options.sort(() => Math.random() - 0.5);
-            
-            document.getElementById('opt1').innerText = options[0];
-            document.getElementById('opt2').innerText = options[1];
-            document.getElementById('opt3').innerText = options[2];
-        }
-
-        function handleItemTouch(index, element) {
-            if (canCross) {
-                let expectedIndex = p16_n1 - 1 - crossedCount;
-                if (index === expectedIndex) {
-                    element.classList.add('crossed');
-                    crossedCount++;
-                    speakText(crossedCount.toString());
-                    
-                    if (crossedCount === p16_n2) {
-                        canCross = false;
-                        canHighlight = true;
-                        document.getElementById('game-instruction').innerText = "Now touch the rest from the left to count!";
-                    }
-                }
-            } else if (canHighlight) {
-                let expectedIndex = highlightedCount;
-                if (index === expectedIndex) {
-                    element.classList.add('highlighted');
-                    highlightedCount++;
-                    speakText(highlightedCount.toString());
-                    
-                    if (highlightedCount === p16_target) {
-                        canHighlight = false;
-                        document.getElementById('game-instruction').innerText = "Drag the correct answer!";
-                    }
-                }
-            }
-        }
+        // --- Sequence Drag and Drop (Page 11) Logic ---
+        let p11_filledCount = 0;
 
         function allowDrop(ev) { ev.preventDefault(); }
         
@@ -628,204 +426,104 @@
             ev.dataTransfer.setData("value", value);
         }
 
-        function dropSub(ev) {
+        function initPage11() {
+            p11_filledCount = 0;
+            let seq = [];
+            for (let i = 80; i <= 90; i++) seq.push(i);
+
+            // Pick 2 random unique indices
+            let idx1 = Math.floor(Math.random() * 11);
+            let idx2;
+            do {
+                idx2 = Math.floor(Math.random() * 11);
+            } while (idx1 === idx2);
+
+            let missingIndices = [idx1, idx2];
+            let missingValues = [seq[idx1], seq[idx2]];
+
+            let container = document.getElementById('seq-container');
+            container.innerHTML = "";
+
+            let row1 = document.createElement('div');
+            row1.className = 'seq-row';
+            let row2 = document.createElement('div');
+            row2.className = 'seq-row';
+
+            // Populate Row 1 (indices 0 to 5) and Row 2 (indices 6 to 10)
+            for (let i = 0; i < 11; i++) {
+                let el;
+                if (missingIndices.includes(i)) {
+                    el = document.createElement('div');
+                    el.className = 'seq-drop-box';
+                    el.id = 'seq-drop-' + i;
+                    el.ondrop = (ev) => dropSeq(ev, seq[i], el.id);
+                    el.ondragover = allowDrop;
+                } else {
+                    el = document.createElement('div');
+                    el.className = 'seq-num';
+                    el.innerText = seq[i];
+                }
+                
+                if (i <= 5) row1.appendChild(el);
+                else row2.appendChild(el);
+            }
+            container.appendChild(row1);
+            container.appendChild(row2);
+
+            // Setup Options
+            let optionsContainer = document.getElementById('seq-options');
+            optionsContainer.innerHTML = "";
+            let options = [...missingValues].sort(() => Math.random() - 0.5);
+            
+            options.forEach(val => {
+                let opt = document.createElement('div');
+                opt.className = 'seq-drag-num';
+                opt.draggable = true;
+                opt.innerText = val;
+                opt.ondragstart = (ev) => drag(ev, 'seqnum', val);
+                optionsContainer.appendChild(opt);
+            });
+            
+            speakText("Drag the missing numbers to complete the sequence.");
+        }
+
+        function dropSeq(ev, expectedValue, dropBoxId) {
             ev.preventDefault();
             let type = ev.dataTransfer.getData("type");
-            let value = ev.dataTransfer.getData("value");
+            let value = parseInt(ev.dataTransfer.getData("value"));
 
-            if (type === 'num') {
-                let numValue = parseInt(value);
-                let ansBox = document.getElementById('game-ans-box');
-                
-                if (numValue === p16_target) {
-                    ansBox.innerText = value;
-                    ansBox.style.background = "#A5D6A7"; 
-                    ansBox.classList.remove('shake');
-                    speakText("Correct! Great job!");
-                    setTimeout(() => { if(currentPage === 16) initPage16(); }, 3500); 
+            if (type === 'seqnum') {
+                if (value === expectedValue) {
+                    let box = document.getElementById(dropBoxId);
+                    box.innerText = value;
+                    box.classList.remove('seq-drop-box');
+                    box.classList.add('seq-num', 'seq-filled');
+                    box.ondrop = null; 
+                    box.ondragover = null;
+
+                    let optionsContainer = document.getElementById('seq-options');
+                    Array.from(optionsContainer.children).forEach(child => {
+                        if (parseInt(child.innerText) === value) {
+                            child.remove();
+                        }
+                    });
+
+                    p11_filledCount++;
+                    speakText("Correct!");
+
+                    if (p11_filledCount === 2) {
+                        setTimeout(() => { 
+                            speakText("Great job! Here is a new one."); 
+                        }, 1000);
+                        setTimeout(() => { 
+                            if (currentPage === 11) initPage11(); 
+                        }, 3000);
+                    }
                 } else {
-                    ansBox.innerText = "?";
-                    ansBox.style.background = "#EF9A9A";
-                    ansBox.classList.remove('shake');
-                    void ansBox.offsetWidth;
-                    ansBox.classList.add('shake');
                     speakText("Try again!");
-                    setTimeout(() => { ansBox.style.background = "#E3F2FD"; }, 1000);
                 }
             }
         }
-
-        // --- Page 17 Subtraction Interactive Story Logic ---
-        let p17_n1, p17_n2, p17_total;
-        
-        // Added pronoun mappings to ensure grammatical correctness
-        const storyNames = [
-            { name: "Mia", pronoun: "She" },
-            { name: "Sam", pronoun: "He" },
-            { name: "Leo", pronoun: "He" },
-            { name: "Ava", pronoun: "She" },
-            { name: "Zoe", pronoun: "She" },
-            { name: "Max", pronoun: "He" },
-            { name: "Noah", pronoun: "He" }
-        ];
-        
-        // Differentiated action types (whether the person or the item performs the second action)
-        const subThemes = [
-            { item: "balloons", emoji: "🎈", action1: "had", action2: "flew away", question: "does", type: "item" },
-            { item: "apples", emoji: "🍎", action1: "picked", action2: "ate", question: "does", type: "person" },
-            { item: "cookies", emoji: "🍪", action1: "baked", action2: "gave away", question: "does", type: "person" },
-            { item: "birds", emoji: "🐦", action1: "saw", action2: "flew away", question: "did", type: "item" },
-            { item: "candy", emoji: "🍬", action1: "had", action2: "ate", question: "does", type: "person" }
-        ];
-
-        function initPage17() {
-            // First number between 5 and 10
-            p17_n1 = Math.floor(Math.random() * 6) + 5;
-            // Second number between 1 and n1-1
-            p17_n2 = Math.floor(Math.random() * (p17_n1 - 1)) + 1;
-            p17_total = p17_n1 - p17_n2;
-            
-            let personObj = storyNames[Math.floor(Math.random() * storyNames.length)];
-            let name = personObj.name;
-            let pronoun = personObj.pronoun;
-            let theme = subThemes[Math.floor(Math.random() * subThemes.length)];
-
-            // Determine grammatical structure based on the theme type
-            let sentence2 = theme.type === "person" 
-                ? `${pronoun} ${theme.action2} ${p17_n2} ${theme.item}.` 
-                : `${p17_n2} ${theme.item} ${theme.action2}.`;
-
-            document.getElementById('p17-story').innerText = `${name} ${theme.action1} ${p17_n1} ${theme.item}. ${sentence2} How many ${theme.item} ${theme.question} ${name} have left?`;
-            speakText(document.getElementById('p17-story').innerText);
-
-            // Populate visual items grid
-            let visualsContainer = document.getElementById('p17-visuals');
-            visualsContainer.innerHTML = "";
-            for(let i=0; i < p17_n1; i++) {
-                let div = document.createElement('div');
-                div.innerText = theme.emoji;
-                div.style.textAlign = 'center';
-                visualsContainer.appendChild(div);
-            }
-
-            // Reset drop zones
-            ['drop1', 'drop2', 'drop3'].forEach(id => {
-                let el = document.getElementById('p17-' + id);
-                el.innerText = "";
-                el.style.background = "#fff";
-                el.style.borderColor = "#FF8F00";
-            });
-
-            // Set up draggables with a distractor
-            let distractor;
-            do {
-                distractor = Math.floor(Math.random() * 10) + 1; 
-            } while (distractor === p17_n1 || distractor === p17_n2 || distractor === p17_total);
-            
-            let draggables = [p17_n1, p17_n2, p17_total, distractor];
-            draggables.sort(() => Math.random() - 0.5); 
-
-            let dragContainer = document.getElementById('p17-draggables');
-            dragContainer.innerHTML = "";
-            draggables.forEach(num => {
-                let div = document.createElement('div');
-                div.className = 'p17-drag-num';
-                div.draggable = true;
-                div.innerText = num;
-                div.ondragstart = (ev) => drag(ev, 'p17num', num);
-                dragContainer.appendChild(div);
-            });
-            clearCanvas();
-        }
-
-        function dropP17(ev, targetId) {
-            ev.preventDefault();
-            let type = ev.dataTransfer.getData("type");
-            let value = ev.dataTransfer.getData("value");
-
-            if (type === 'p17num') {
-                document.getElementById('p17-' + targetId).innerText = value;
-            }
-        }
-
-        function checkP17() {
-            let v1 = document.getElementById('p17-drop1').innerText;
-            let v2 = document.getElementById('p17-drop2').innerText;
-            let v3 = document.getElementById('p17-drop3').innerText;
-
-            if (!v1 || !v2 || !v3) {
-                speakText("Please fill all circles!");
-                return;
-            }
-
-            v1 = parseInt(v1);
-            v2 = parseInt(v2);
-            v3 = parseInt(v3);
-
-            // Subtraction logic: order matters
-            let isCorrect = (v1 === p17_n1) && (v2 === p17_n2) && (v3 === p17_total);
-
-            if (isCorrect) {
-                ['drop1', 'drop2', 'drop3'].forEach(id => {
-                    document.getElementById('p17-' + id).style.background = "#A5D6A7";
-                    document.getElementById('p17-' + id).style.borderColor = "#388E3C";
-                });
-                speakText("Correct! Great job! Here is a new problem.");
-                setTimeout(() => { if(currentPage === 17) initPage17(); }, 3500);
-            } else {
-                ['drop1', 'drop2', 'drop3'].forEach(id => {
-                    document.getElementById('p17-' + id).style.background = "#EF9A9A";
-                    document.getElementById('p17-' + id).style.borderColor = "#E53935";
-                });
-                speakText("Not quite right. Try again!");
-                setTimeout(() => {
-                    ['drop1', 'drop2', 'drop3'].forEach(id => {
-                        document.getElementById('p17-' + id).style.background = "#fff";
-                        document.getElementById('p17-' + id).style.borderColor = "#FF8F00";
-                    });
-                }, 1500);
-            }
-        }
-
-        // --- Canvas Drawing Logic (Page 17) ---
-        const canvas = document.getElementById('drawing-canvas');
-        const ctx = canvas.getContext('2d');
-        let isDrawing = false;
-        ctx.lineWidth = 4;
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = '#333';
-
-        function getMousePos(canvas, evt) {
-            const rect = canvas.getBoundingClientRect();
-            return { x: evt.clientX - rect.left, y: evt.clientY - rect.top };
-        }
-        function getTouchPos(canvas, evt) {
-            const rect = canvas.getBoundingClientRect();
-            return { x: evt.touches[0].clientX - rect.left, y: evt.touches[0].clientY - rect.top };
-        }
-
-        canvas.addEventListener('mousedown', (e) => {
-            isDrawing = true; const pos = getMousePos(canvas, e);
-            ctx.beginPath(); ctx.moveTo(pos.x, pos.y);
-        });
-        canvas.addEventListener('mousemove', (e) => {
-            if (!isDrawing) return; const pos = getMousePos(canvas, e);
-            ctx.lineTo(pos.x, pos.y); ctx.stroke();
-        });
-        canvas.addEventListener('mouseup', () => { isDrawing = false; });
-        canvas.addEventListener('mouseout', () => { isDrawing = false; });
-
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault(); isDrawing = true; const pos = getTouchPos(canvas, e);
-            ctx.beginPath(); ctx.moveTo(pos.x, pos.y);
-        });
-        canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault(); if (!isDrawing) return; const pos = getTouchPos(canvas, e);
-            ctx.lineTo(pos.x, pos.y); ctx.stroke();
-        });
-        canvas.addEventListener('touchend', () => { isDrawing = false; });
-
-        function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
     </script>
 </body>
 </html>
