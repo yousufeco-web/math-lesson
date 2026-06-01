@@ -130,7 +130,7 @@
         }
         .btn-pause:hover { background-color: #FFA000; }
 
-        /* Sequence Drag and Drop (Page 11) */
+        /* Sequence Drag and Drop (Pages 11 & 13) */
         .seq-row {
             display: flex;
             gap: 20px;
@@ -295,6 +295,14 @@
                 <div class="grid-num clickable" onclick="speakText('60')">60</div>
             </div>
         </div>
+
+        <div id="page13" class="page">
+            <h2>Complete the 5s Sequence</h2>
+            <div id="seq5-container">
+                </div>
+            <div id="seq5-options" class="bottom-tools">
+                </div>
+        </div>
     </div>
 
     <div id="nav-bar">
@@ -306,7 +314,7 @@
     <script>
         // --- State Management ---
         let currentPage = 1;
-        const totalPages = 12;
+        const totalPages = 13;
         let activeRunId = 0; 
         let isPaused = false;
 
@@ -414,10 +422,10 @@
             else if (page === 12) {
                 speakText("Count by fives");
             }
+            else if (page === 13) {
+                initPage13();
+            }
         }
-
-        // --- Sequence Drag and Drop (Page 11) Logic ---
-        let p11_filledCount = 0;
 
         function allowDrop(ev) { ev.preventDefault(); }
         
@@ -425,6 +433,9 @@
             ev.dataTransfer.setData("type", type);
             ev.dataTransfer.setData("value", value);
         }
+
+        // --- Sequence Drag and Drop (Page 11) Logic ---
+        let p11_filledCount = 0;
 
         function initPage11() {
             p11_filledCount = 0;
@@ -517,6 +528,108 @@
                         }, 1000);
                         setTimeout(() => { 
                             if (currentPage === 11) initPage11(); 
+                        }, 3000);
+                    }
+                } else {
+                    speakText("Try again!");
+                }
+            }
+        }
+
+        // --- Sequence Drag and Drop (Page 13) Logic ---
+        let p13_filledCount = 0;
+
+        function initPage13() {
+            p13_filledCount = 0;
+            let seq = [];
+            for (let i = 5; i <= 60; i += 5) seq.push(i);
+
+            // Pick 2 random unique indices out of 12 items
+            let idx1 = Math.floor(Math.random() * 12);
+            let idx2;
+            do {
+                idx2 = Math.floor(Math.random() * 12);
+            } while (idx1 === idx2);
+
+            let missingIndices = [idx1, idx2];
+            let missingValues = [seq[idx1], seq[idx2]];
+
+            let container = document.getElementById('seq5-container');
+            container.innerHTML = "";
+
+            let row1 = document.createElement('div');
+            row1.className = 'seq-row';
+            let row2 = document.createElement('div');
+            row2.className = 'seq-row';
+
+            // Populate Row 1 (indices 0 to 5) and Row 2 (indices 6 to 11)
+            for (let i = 0; i < 12; i++) {
+                let el;
+                if (missingIndices.includes(i)) {
+                    el = document.createElement('div');
+                    el.className = 'seq-drop-box';
+                    el.id = 'seq5-drop-' + i;
+                    el.ondrop = (ev) => dropSeq5(ev, seq[i], el.id);
+                    el.ondragover = allowDrop;
+                } else {
+                    el = document.createElement('div');
+                    el.className = 'seq-num';
+                    el.innerText = seq[i];
+                }
+                
+                if (i <= 5) row1.appendChild(el);
+                else row2.appendChild(el);
+            }
+            container.appendChild(row1);
+            container.appendChild(row2);
+
+            // Setup Options
+            let optionsContainer = document.getElementById('seq5-options');
+            optionsContainer.innerHTML = "";
+            let options = [...missingValues].sort(() => Math.random() - 0.5);
+            
+            options.forEach(val => {
+                let opt = document.createElement('div');
+                opt.className = 'seq-drag-num';
+                opt.draggable = true;
+                opt.innerText = val;
+                opt.ondragstart = (ev) => drag(ev, 'seq5num', val);
+                optionsContainer.appendChild(opt);
+            });
+            
+            speakText("Drag the missing numbers to complete the sequence of fives.");
+        }
+
+        function dropSeq5(ev, expectedValue, dropBoxId) {
+            ev.preventDefault();
+            let type = ev.dataTransfer.getData("type");
+            let value = parseInt(ev.dataTransfer.getData("value"));
+
+            if (type === 'seq5num') {
+                if (value === expectedValue) {
+                    let box = document.getElementById(dropBoxId);
+                    box.innerText = value;
+                    box.classList.remove('seq-drop-box');
+                    box.classList.add('seq-num', 'seq-filled');
+                    box.ondrop = null; 
+                    box.ondragover = null;
+
+                    let optionsContainer = document.getElementById('seq5-options');
+                    Array.from(optionsContainer.children).forEach(child => {
+                        if (parseInt(child.innerText) === value) {
+                            child.remove();
+                        }
+                    });
+
+                    p13_filledCount++;
+                    speakText("Correct!");
+
+                    if (p13_filledCount === 2) {
+                        setTimeout(() => { 
+                            speakText("Great job! Here is a new one."); 
+                        }, 1000);
+                        setTimeout(() => { 
+                            if (currentPage === 13) initPage13(); 
                         }, 3000);
                     }
                 } else {
