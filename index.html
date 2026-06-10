@@ -261,7 +261,7 @@
         
         <div id="page7" class="page"><div id="p7-display" class="huge-text">1</div></div>
         
-        <div id="page8" class="page"><div id="p8-display" class="huge-text">80</div></div>
+        <div id="page8" class="page"><div id="p8-display" class="huge-text">90</div></div>
         
         <div id="page9" class="page"><h1>Ready for the test?</h1></div>
 
@@ -278,6 +278,29 @@
         </div>
 
         <div id="page12" class="page">
+            <h2>Count by 2s</h2>
+            <div class="num-grid five-cols">
+                <div class="grid-num clickable" onclick="speakText('2')">2</div>
+                <div class="grid-num clickable" onclick="speakText('4')">4</div>
+                <div class="grid-num clickable" onclick="speakText('6')">6</div>
+                <div class="grid-num clickable" onclick="speakText('8')">8</div>
+                <div class="grid-num clickable" onclick="speakText('10')">10</div>
+                
+                <div class="grid-num clickable" onclick="speakText('12')">12</div>
+                <div class="grid-num clickable" onclick="speakText('14')">14</div>
+                <div class="grid-num clickable" onclick="speakText('16')">16</div>
+                <div class="grid-num clickable" onclick="speakText('18')">18</div>
+                <div class="grid-num clickable" onclick="speakText('20')">20</div>
+            </div>
+        </div>
+
+        <div id="page13" class="page">
+            <h2>Complete the 2s Sequence</h2>
+            <div id="seq2-container"></div>
+            <div id="seq2-options" class="bottom-tools"></div>
+        </div>
+
+        <div id="page14" class="page">
             <h2>Count by 5s</h2>
             <div class="num-grid">
                 <div class="grid-num clickable" onclick="speakText('5')">5</div>
@@ -297,13 +320,13 @@
             </div>
         </div>
 
-        <div id="page13" class="page">
+        <div id="page15" class="page">
             <h2>Complete the 5s Sequence</h2>
             <div id="seq5-container"></div>
             <div id="seq5-options" class="bottom-tools"></div>
         </div>
 
-        <div id="page14" class="page">
+        <div id="page16" class="page">
             <h2>Count by 10s</h2>
             <div class="num-grid five-cols">
                 <div class="grid-num clickable" onclick="speakText('10')">10</div>
@@ -320,13 +343,13 @@
             </div>
         </div>
 
-        <div id="page15" class="page">
+        <div id="page17" class="page">
             <h2>Complete the 10s Sequence</h2>
             <div id="seq10-container"></div>
             <div id="seq10-options" class="bottom-tools"></div>
         </div>
 
-        <div id="page16" class="page">
+        <div id="page18" class="page">
             <h2>Count by 25s</h2>
             <div class="num-grid">
                 <div class="grid-num clickable" onclick="speakText('25')">25</div>
@@ -336,7 +359,7 @@
             </div>
         </div>
 
-        <div id="page17" class="page">
+        <div id="page19" class="page">
             <h2>Complete the 25s Sequence</h2>
             <div id="seq25-container"></div>
             <div id="seq25-options" class="bottom-tools"></div>
@@ -352,7 +375,7 @@
     <script>
         // --- State Management ---
         let currentPage = 1;
-        const totalPages = 17;
+        const totalPages = 19;
         let activeRunId = 0; 
         let isPaused = false;
 
@@ -420,7 +443,7 @@
             }
             else if (page === 8) {
                 while(activeRunId === currentRun) {
-                    for(let i=80; i<=90; i++) {
+                    for(let i=90; i<=100; i++) {
                         if (activeRunId !== currentRun) break;
                         document.getElementById('p8-display').innerText = i;
                         speakText(i.toString());
@@ -430,7 +453,7 @@
             }
             else if (page === 9) { speakText("Ready for the test?"); }
             else if (page === 10) {
-                const pool = [80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90];
+                const pool = [90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100];
                 while(activeRunId === currentRun) {
                     const target = pool[Math.floor(Math.random() * pool.length)];
                     document.getElementById('p10-num').innerText = target;
@@ -455,12 +478,14 @@
                 }
             }
             else if (page === 11) { initPage11(); }
-            else if (page === 12) { speakText("Count by fives"); }
+            else if (page === 12) { speakText("Count by twos"); }
             else if (page === 13) { initPage13(); }
-            else if (page === 14) { speakText("Count by tens"); }
+            else if (page === 14) { speakText("Count by fives"); }
             else if (page === 15) { initPage15(); }
-            else if (page === 16) { speakText("Count by twenty-fives"); }
+            else if (page === 16) { speakText("Count by tens"); }
             else if (page === 17) { initPage17(); }
+            else if (page === 18) { speakText("Count by twenty-fives"); }
+            else if (page === 19) { initPage19(); }
         }
 
         function allowDrop(ev) { ev.preventDefault(); }
@@ -498,7 +523,7 @@
         function initPage11() {
             p11_filledCount = 0;
             let seq = [];
-            for (let i = 80; i <= 90; i++) seq.push(i);
+            for (let i = 90; i <= 100; i++) seq.push(i);
 
             let idx1 = Math.floor(Math.random() * 11);
             let idx2;
@@ -564,11 +589,83 @@
             });
         }
 
-        // --- Sequence Drag and Drop (Page 13) Logic ---
+        // --- Sequence Drag and Drop (Page 13 - Count by 2s) Logic ---
         let p13_filledCount = 0;
 
         function initPage13() {
             p13_filledCount = 0;
+            let seq = [];
+            for (let i = 2; i <= 20; i += 2) seq.push(i); // 10 elements
+
+            let idx1 = Math.floor(Math.random() * 10);
+            let idx2;
+            do { idx2 = Math.floor(Math.random() * 10); } while (idx1 === idx2);
+
+            let missingIndices = [idx1, idx2];
+            let missingValues = [seq[idx1], seq[idx2]];
+
+            let container = document.getElementById('seq2-container');
+            container.innerHTML = "";
+            let row1 = document.createElement('div'); row1.className = 'seq-row';
+            let row2 = document.createElement('div'); row2.className = 'seq-row';
+
+            for (let i = 0; i < 10; i++) {
+                let el;
+                if (missingIndices.includes(i)) {
+                    el = document.createElement('div');
+                    el.className = 'seq-drop-box';
+                    el.id = 'seq2-drop-' + i;
+                    el.ondrop = (ev) => dropSeq2(ev, seq[i], el.id);
+                    el.ondragover = allowDrop;
+                } else {
+                    el = document.createElement('div');
+                    el.className = 'seq-num';
+                    el.innerText = seq[i];
+                }
+                if (i <= 4) row1.appendChild(el);
+                else row2.appendChild(el);
+            }
+            container.appendChild(row1);
+            container.appendChild(row2);
+
+            let optionsContainer = document.getElementById('seq2-options');
+            optionsContainer.innerHTML = "";
+            let options = [...missingValues].sort(() => Math.random() - 0.5);
+            
+            options.forEach(val => {
+                let opt = document.createElement('div');
+                opt.className = 'seq-drag-num';
+                opt.draggable = true;
+                opt.innerText = val;
+                opt.ondragstart = (ev) => drag(ev, 'seq2num', val);
+                optionsContainer.appendChild(opt);
+            });
+            
+            speakText("Drag the missing numbers to complete the sequence of twos.");
+        }
+
+        function dropSeq2(ev, expectedValue, dropBoxId) {
+            checkDrop(ev, expectedValue, dropBoxId, 'seq2num', (val) => {
+                let optionsContainer = document.getElementById('seq2-options');
+                Array.from(optionsContainer.children).forEach(child => {
+                    if (parseInt(child.innerText) === val) child.remove();
+                });
+
+                p13_filledCount++;
+                speakText("Correct!");
+
+                if (p13_filledCount === 2) {
+                    setTimeout(() => speakText("Great job! Here is a new one."), 1000);
+                    setTimeout(() => { if (currentPage === 13) initPage13(); }, 3000);
+                }
+            });
+        }
+
+        // --- Sequence Drag and Drop (Page 15 - Count by 5s) Logic ---
+        let p15_filledCount = 0;
+
+        function initPage15() {
+            p15_filledCount = 0;
             let seq = [];
             for (let i = 5; i <= 60; i += 5) seq.push(i);
 
@@ -626,21 +723,21 @@
                     if (parseInt(child.innerText) === val) child.remove();
                 });
 
-                p13_filledCount++;
+                p15_filledCount++;
                 speakText("Correct!");
 
-                if (p13_filledCount === 2) {
+                if (p15_filledCount === 2) {
                     setTimeout(() => speakText("Great job! Here is a new one."), 1000);
-                    setTimeout(() => { if (currentPage === 13) initPage13(); }, 3000);
+                    setTimeout(() => { if (currentPage === 15) initPage15(); }, 3000);
                 }
             });
         }
 
-        // --- Sequence Drag and Drop (Page 15) Logic ---
-        let p15_filledCount = 0;
+        // --- Sequence Drag and Drop (Page 17 - Count by 10s) Logic ---
+        let p17_filledCount = 0;
 
-        function initPage15() {
-            p15_filledCount = 0;
+        function initPage17() {
+            p17_filledCount = 0;
             let seq = [];
             for (let i = 10; i <= 100; i += 10) seq.push(i); // 10 elements
 
@@ -698,21 +795,21 @@
                     if (parseInt(child.innerText) === val) child.remove();
                 });
 
-                p15_filledCount++;
+                p17_filledCount++;
                 speakText("Correct!");
 
-                if (p15_filledCount === 2) {
+                if (p17_filledCount === 2) {
                     setTimeout(() => speakText("Great job! Here is a new one."), 1000);
-                    setTimeout(() => { if (currentPage === 15) initPage15(); }, 3000);
+                    setTimeout(() => { if (currentPage === 17) initPage17(); }, 3000);
                 }
             });
         }
 
-        // --- Sequence Drag and Drop (Page 17) Logic ---
-        let p17_filledCount = 0;
+        // --- Sequence Drag and Drop (Page 19 - Count by 25s) Logic ---
+        let p19_filledCount = 0;
 
-        function initPage17() {
-            p17_filledCount = 0;
+        function initPage19() {
+            p19_filledCount = 0;
             let seq = [25, 50, 75, 100]; // 4 elements
 
             let missingIdx = Math.floor(Math.random() * 4);
@@ -759,12 +856,12 @@
                     if (parseInt(child.innerText) === val) child.remove();
                 });
 
-                p17_filledCount++;
+                p19_filledCount++;
                 speakText("Correct!");
 
-                if (p17_filledCount === 1) {
+                if (p19_filledCount === 1) {
                     setTimeout(() => speakText("Great job! Here is a new one."), 1000);
-                    setTimeout(() => { if (currentPage === 17) initPage17(); }, 3000);
+                    setTimeout(() => { if (currentPage === 19) initPage19(); }, 3000);
                 }
             });
         }
